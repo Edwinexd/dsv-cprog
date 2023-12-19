@@ -6,18 +6,18 @@
 class Spaceinvader : public Enemy
 {
 public:
-    static std::shared_ptr<Spaceinvader> createInstance(int x, int y, int w, int h, int hp, std::string alive_image_path, std::string dead_image_path) {
-        return std::shared_ptr<Spaceinvader>(new Spaceinvader(x, y, w, h, hp, alive_image_path, dead_image_path));
+    static std::shared_ptr<Spaceinvader> createInstance(std::shared_ptr<Session> session, int x, int y, int w, int h, int hp, std::string alive_image_path, std::string dead_image_path) {
+        return std::shared_ptr<Spaceinvader>(new Spaceinvader(session, x, y, w, h, hp, alive_image_path, dead_image_path));
     }
     void shoot() {
-        std::shared_ptr<Laser> b = Laser::createInstance(getRect().x + (getRect().w/2), getRect().y + getRect().h, 5, 40, true, {0, 1}, 10);
-        ses.add(b);
+        std::shared_ptr<Laser> b = Laser::createInstance(session, get_rect().x + (get_rect().w/2), get_rect().y + get_rect().h, 5, 40, true, {0, 1}, 500);
+        session->add_component(b);
     }
     void mouseDown(int x, int y) {
         shoot();
     }
 protected:
-    Spaceinvader(int x, int y, int w, int h, int hp, std::string alive_path, std::string dead_path) : Enemy(x, y, w, h, true, hp, alive_path, dead_path) {}
+    Spaceinvader(std::shared_ptr<Session> session, int x, int y, int w, int h, int hp, std::string alive_path, std::string dead_path) : Enemy(session, x, y, w, h, true, hp, alive_path, dead_path) {}
 };
 
 

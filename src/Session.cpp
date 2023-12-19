@@ -1,6 +1,9 @@
 #include <SDL2/SDL.h>
 #include <stdexcept>
 #include "Session.h"
+#include <iostream>
+
+int count = 0;
 
 void Session::add_component(std::shared_ptr<Component> comp)
 {
@@ -8,13 +11,15 @@ void Session::add_component(std::shared_ptr<Component> comp)
     {
         throw std::runtime_error("Component is nullptr");
     }
-    for (auto &component : this->components)
+    for (auto component : this->components)
     {
         if (component == comp)
         {
             return;
         }
     }
+    std::cout << "Adding component" << count << std::endl;
+    count++;
     this->add_queue.push_back(comp);
 }
 void Session::remove_component(std::shared_ptr<Component> comp)

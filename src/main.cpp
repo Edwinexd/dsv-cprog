@@ -15,6 +15,7 @@
 #include <Color.h>
 #include <Enemy.h>
 #include <Laser.h>
+#include <Spaceinvader.h>
 
 /*
 *   'gResPath' is a global constant defined in "Constants.h", 
@@ -26,7 +27,7 @@
 Session ses;
 std::shared_ptr<Session> g_session = std::make_shared<Session>(ses);
 
-
+/*
 class Spaceinvader : public Enemy
 {
 public:
@@ -42,7 +43,7 @@ public:
 	}
 protected:
 	Spaceinvader(std::shared_ptr<Session> session, int x, int y, int w, int h, bool has_collision, int hp, std::string alive_path, std::string dead_path) : Enemy(session, x, y, w, h, has_collision, hp, alive_path, dead_path) {}
-};
+};*/
 
 
 // class Pistol : public Component {
@@ -75,7 +76,7 @@ int main(int argc, char** argv) {
 	ses.add_component(enemy);
 	enemy->kill();
 
-	auto spaceinvader = Spaceinvader::createInstance(g_session, 200, 200, 45, 45, true, 100, "images/alive.png", "images/dead.png");
+	auto spaceinvader = Spaceinvader::createInstance(g_session, 200, 200, 45, 45, 100, "images/alive.png", "images/dead.png");
 	const int numRows = 5;
 	const int numCols = 10;
 	const int invaderWidth = 40;
@@ -86,7 +87,7 @@ int main(int argc, char** argv) {
 		for (int col = 0; col < numCols; col++) {
 			int x = col * (invaderWidth + invaderSpacing);
 			int y = row * (invaderHeight + invaderSpacing);
-			std::shared_ptr<Spaceinvader> invader = Spaceinvader::createInstance(g_session, x, y, invaderWidth, invaderHeight, true, 100, "images/alive.png", "images/dead.png");
+			std::shared_ptr<Spaceinvader> invader = Spaceinvader::createInstance(g_session, x, y, invaderWidth, invaderHeight, 100, "images/alive.png", "images/dead.png");
 			ses.add_component(invader);
 		}
 }
