@@ -1,9 +1,68 @@
-#include "Session.h"
 #include <SDL2/SDL.h>
-#include "Component.h"
-#include "System.h"
+#include "Session.h"
+void Session::add_component(std::shared_ptr<Component> comp)
+{
+	this->components.push_back(comp);
+}
+void Session::remove_component(std::shared_ptr<Component> comp)
+{
+    for(long i = 0; i < this->components.size(); i++)
+    {
+        if(comp == this->components.at(i))
+        {
+            this->components.erase(this->components.begin() + i);
+        }
+    }
+}
 
-using namespace std;
+void Session::register_key_event(KeyEventCallback callback) {
+    if (this->key_events.count(callback.getKeyCode() == 0))
+    {
+        this->key_events.insert(std::make_pair(callback.getKeyCode() ,std::vector<KeyEventCallback>()));
+    }
+    this->key_events.at(callback.getKeyCode()).push_back(callback);
+}
+
+void Session::unregister_key_event(std::shared_ptr<Component> src) {
+    for(auto & key_event : this->key_events)
+    {
+        auto vector = key_event.second;
+        for(auto iter = vector.begin(); iter != vector.end(); iter++)
+        {
+            if(src == *iter)
+            {
+                vector.erase(iter);
+            }
+
+        }
+    }
+
+}
+
+void Session::unregister_key_event(std::shared_ptr<Component> src, wlong key_code) {
+    if(this->key_events.count(key_code) == 1) {
+        auto vector = this->key_events.at(key_code);
+        for (auto iter = vector.begin(); iter != vector.end(); iter++) {
+            if (src == *iter) {
+                vector.erase(iter);
+            }
+
+        }
+    }
+
+};
+
+void Session::run()
+{
+    bool exit = 0;
+
+    while(!quit)
+    {
+
+    }
+}
+
+/*
 
 #define FPS 80
 
@@ -81,3 +140,4 @@ void Session::run() {
 void Session::play_sound(std::string path, int loops) {
     sys.play_sound(path, loops);
 }
+*/
