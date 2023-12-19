@@ -24,7 +24,7 @@ void Session::remove_component(std::shared_ptr<Component> comp)
 
 }
 
-void Session::removed_queued()
+void Session::remove_queued()
 {
     for(auto & comp : this->remove_queue)
     {
@@ -174,7 +174,7 @@ void Session::run()
             component->render();
         }
 
-        this->removed_queued();
+        this->remove_queued();
         SDL_RenderPresent(this->ren);
         int delay = nextTick - SDL_GetTicks();
         if (delay > 0)

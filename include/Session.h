@@ -31,6 +31,8 @@ private:
 	std::vector<std::shared_ptr<Component>> components;
 	std::vector<std::shared_ptr<Component>> add_queue, remove_queue;
 	std::unordered_map<int32_t , std::vector<KeyEventCallback>> key_events;
+
+    void remove_queued();
 public:
 
 	Session() : window_data(0,0,0,0)
