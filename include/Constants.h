@@ -12,6 +12,7 @@ namespace constants
     //if '/build/debug/resources/' is used, use the following:
 
     const std::string gResPath = "./resources/";
+    const unsigned int FPS = 80;
 }
 
 #endif
