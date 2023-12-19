@@ -1,10 +1,9 @@
 #include <Enemy.h>
 #include <MultipartImageTexture.h>
-#include <System.h>
 
-Enemy::Enemy(int x, int y, int w, int h, bool has_collission, int hp, std::string alive_path, std::string dead_path) : MultipartComponent(x, y, w, h, has_collission) {
-    addTexture(MultipartImageTexture::createInstance(alive_path));
-    addTexture(MultipartImageTexture::createInstance(dead_path));
+Enemy::Enemy(std::shared_ptr<Session> session, int x, int y, int w, int h, bool has_collision, int hp, std::string alive_path, std::string dead_path) : MultipartComponent(session, x, y, w, h, has_collision) {
+    addTexture(MultipartImageTexture::createInstance(session, alive_path));
+    addTexture(MultipartImageTexture::createInstance(session, dead_path));
     this->hp = hp;
 }
 

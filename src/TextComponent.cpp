@@ -1,11 +1,10 @@
-#include<TextComponent.h>
+#include <TextComponent.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <string>
-#include <system.h>
 #include <iostream>
 
-TextComponent::TextComponent(int x, int y, int w, int h, std::string text) : Component(x, y, w, h, false) {
+TextComponent::TextComponent(std::shared_ptr<Session> session, int x, int y, int w, int h, std::string text) : Component(session, x, y, w, h, false) {
     this->text = text;
     font = TTF_OpenFont((constants::gResPath + "fonts/Roboto-Thin.ttf").c_str(), 24);
     SDL_Color color = { 255, 255, 255 };
@@ -15,7 +14,7 @@ TextComponent::TextComponent(int x, int y, int w, int h, std::string text) : Com
 }
 
 void TextComponent::render() const {
-    const SDL_Rect &rect = getRect();
+    const SDL_Rect &rect = get_rect();
     SDL_RenderCopy(sys.ren, tex, NULL, &rect);
 }
 

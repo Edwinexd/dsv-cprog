@@ -1,6 +1,6 @@
 #ifndef MULTIPARTCOMPONENT_H
 #define MULTIPARTCOMPONENT_H
-#include<Component.h>
+#include <Component.h>
 #include <MultipartTexture.h>
 #include <SDL2/SDL.h>
 #include <string>
@@ -10,8 +10,8 @@
 class MultipartComponent : public Component
 {
 public:
-    static std::shared_ptr<MultipartComponent> createInstance(int x, int y, int w, int h, bool has_collission) {
-        return std::shared_ptr<MultipartComponent>(new MultipartComponent(x, y, w, h, has_collission));
+    static std::shared_ptr<MultipartComponent> createInstance(std::shared_ptr<Session> session, int x, int y, int w, int h, bool has_collision) {
+        return std::shared_ptr<MultipartComponent>(new MultipartComponent(session, x, y, w, h, has_collision));
     }
     void render() const override;
     void tick() {};
@@ -22,7 +22,7 @@ public:
     void nextTexture();
     ~MultipartComponent();
 protected:
-    MultipartComponent(int x, int y, int w, int h, bool has_collission) : Component(x, y, w, h, has_collission) {
+    MultipartComponent(std::shared_ptr<Session> session, int x, int y, int w, int h, bool has_collision) : Component(session, x, y, w, h, has_collision) {
         current_texture = 0;
         textures = std::vector<std::shared_ptr<MultipartTexture>>();
     }

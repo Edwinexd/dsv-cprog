@@ -1,5 +1,5 @@
 #ifndef SPACEINVADER_H
-#define SPACEINVADERY_H
+#define SPACEINVADER_H
 #include <Enemy.h>
 
 

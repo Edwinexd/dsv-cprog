@@ -8,6 +8,7 @@
 #include <string>
 #include <memory>
 #include <SDL2/SDL_mixer.h>
+#include "System.h"
 struct WindowInformation
 {
     int w, h, x, y;
@@ -27,7 +28,6 @@ private:
 	std::vector<std::shared_ptr<Component>> components;
 	std::vector<std::shared_ptr<Component>> add_queue, remove_queue;
 	std::unordered_map<int32_t , std::vector<KeyEventCallback>> key_events;
-    std::unordered_map<std::string, std::unique_ptr<Mix_Chunk>> sound_bank;
 public:
 
 	Session(WindowInformation n_win_info) : window_data(n_win_info)
@@ -36,7 +36,8 @@ public:
 		add_queue = std::vector<std::shared_ptr<Component>>();
 		remove_queue = std::vector<std::shared_ptr<Component>>();
 		key_events = std::unordered_map<int32_t , std::vector<KeyEventCallback>>();
-        sound_bank = std::unordered_map<std::string, std::unique_ptr<Mix_Chunk>>();
+		win = sys.win;
+		ren = sys.ren;
 	}
 
 
@@ -53,7 +54,7 @@ public:
 	void check_collision(std::shared_ptr<Component>& src);
 	void run();
 	void play_sound(std::string path, int loops);
-	};
+};
 
 /*
 class Session

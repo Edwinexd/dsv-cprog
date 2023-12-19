@@ -2,27 +2,29 @@
 #define COMPONENT_H
 #include <SDL2/SDL.h>
 #include <memory>
+#include "Session.h"
 
 class Component : public std::enable_shared_from_this<Component>
 {
 public:
 	// TODO: the following should be allowed to be set as lambdas via Component.onCollision = [](Component* other) { ... };
-	virtual void onCollision(Component* other) {};
+	virtual void on_collision(std::shared_ptr<Component> other) {};
 	virtual void mouseDown(int x, int y) {}
 	virtual void mouseUp(int x, int y) {}
 	virtual void keyDown(SDL_Keycode key) {}
 	virtual void keyUp(SDL_Keycode key) {}
 	virtual void render() const = 0;
-	SDL_Rect getRect() const { return rect; }
+	SDL_Rect get_rect() const { return rect; }
 	virtual void tick() = 0;
-	bool hasCollission() const { return has_collission; }
-	void set_has_collision(bool has_collission) { this->has_collission = has_collission; }
+	bool has_collision() const { return collision; }
+	void set_has_collision(bool c) { this->collision = c; }
 	// std::shared_ptr<Component> getShared() { return shared_from_this(); }
 protected:
-	Component(int x, int y, int w, int h, bool has_collission) : rect{ x,y,w,h } {}
+	Component(Session* session, int x, int y, int w, int h, bool has_collision) : rect{ x,y,w,h }, session(session) {}
 	SDL_Rect rect;
+	Session* session;	
 private:
-	bool has_collission;
+	bool collision;
 };
 
 // TODO: Make IMGComponent, TextComponent, 

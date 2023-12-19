@@ -10,6 +10,8 @@ enum KeyPressType{
     UP
 };
 
+class Component;
+
 class KeyEventCallback
 {
 
@@ -39,7 +41,6 @@ class KeyEventCallback
 
     friend bool operator==(const std::shared_ptr<Component>& lhs, const KeyEventCallback rhs)
     {
-
         if(auto src = rhs.target_comp.lock())
         {
             return lhs == src;
@@ -47,7 +48,6 @@ class KeyEventCallback
         else {
             return false;
         }
-
     }
     
 };

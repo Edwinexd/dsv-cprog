@@ -14,7 +14,7 @@ void Session::add_component(std::shared_ptr<Component> comp)
 }
 void Session::remove_component(std::shared_ptr<Component> comp)
 {
-    for(long i = 0; i < this->components.size(); i++)
+    for(std::size_t i = 0; i < this->components.size(); i++)
     {
         if(comp == this->components.at(i))
         {
@@ -65,7 +65,7 @@ void Session::check_collision(std::shared_ptr<Component>& src) {
         for (auto& other_component : this->components) {
             if (src != other_component) //TODO: AND IF has_collision()
             {
-                if (SDL_HasIntersection(src->get_rect(), &other_component->get_rect())) {
+                if (SDL_HasIntersection(&src->get_rect(), &other_component->get_rect())) {
                     src->on_collision(other_component);
                 }
             }
@@ -74,11 +74,7 @@ void Session::check_collision(std::shared_ptr<Component>& src) {
 }
 
 void Session::play_sound(std::string path, int loops) {
-    if(this->sound_bank.count(path) == 0)
-    {
-        this->sound_bank.insert(std::make_pair(path, std::unique_ptr<Mix_Chunk>(Mix_LoadWAV((constants::gResPath + path).c_str()))));
-    }
-    Mix_PlayChannel(-1, this->sound_bank.at(path).get(), loops);
+    sys.play_sound(path, loops);
 }
 
 void Session::run()
@@ -205,7 +201,7 @@ void Session::run() {
 		for (std::shared_ptr<Component> c : comps) {
 			c->tick();
             if (counter % 100 == 0) {
-                if (c->getRect().y <= -50) {
+                if (c->get_rect().y <= -50) {
                     remove(c);
                 }
             }

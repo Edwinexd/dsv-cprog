@@ -4,14 +4,13 @@
 #include <string>
 #include <memory>
 #include <vector>
-#include <System.h>
 #include <stdexcept>
 
 void MultipartComponent::render() const {
     if (textures.size() == 0) {
         throw std::runtime_error("No textures in MultipartComponent");
     }
-    const SDL_Rect &rect = getRect();
+    const SDL_Rect &rect = get_rect();
     SDL_RenderCopy(sys.ren, textures[current_texture]->getTexture(), NULL, &rect);
 }
 

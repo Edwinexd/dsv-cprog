@@ -5,8 +5,8 @@
 class Enemy : public MultipartComponent
 {
 public:
-    static std::shared_ptr<Enemy> createInstance(int x, int y, int w, int h, bool has_collission, int hp, std::string alive_image_path, std::string dead_image_path) {
-        return std::shared_ptr<Enemy>(new Enemy(x, y, w, h, has_collission, hp, alive_image_path, dead_image_path));
+    static std::shared_ptr<Enemy> createInstance(std::shared_ptr<Session> session, int x, int y, int w, int h, bool has_collision, int hp, std::string alive_image_path, std::string dead_image_path) {
+        return std::shared_ptr<Enemy>(new Enemy(session, x, y, w, h, has_collision, hp, alive_image_path, dead_image_path));
     }
     void tick() override;
     void kill() {
@@ -24,7 +24,7 @@ public:
         }
     }
 protected:
-    Enemy(int x, int y, int w, int h, bool has_collission, int hp, std::string alive_path, std::string dead_path);
+    Enemy(std::shared_ptr<Session> session, int x, int y, int w, int h, bool has_collision, int hp, std::string alive_path, std::string dead_path);
 private:
     int hp;
     int ticks_till_removal = 170;
