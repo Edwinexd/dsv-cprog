@@ -3,8 +3,6 @@
 #include "Component.h"
 #include "System.h"
 
-using namespace std;
-
 #define FPS 80
 
 void Session::add(std::shared_ptr<Component> comp) {
@@ -52,7 +50,7 @@ void Session::run() {
 		added.clear();
 
 		for (std::shared_ptr<Component> c : removed) {
-			for (vector<std::shared_ptr<Component>>::iterator i = comps.begin();
+			for (std::vector<std::shared_ptr<Component>>::iterator i = comps.begin();
 				i != comps.end();)
 			{
 				if (*i == c) 
@@ -66,7 +64,7 @@ void Session::run() {
 		}
 		removed.clear();
 
-		SDL_SetRenderDrawColor(sys.ren, 255, 255, 255, 255);
+		SDL_SetRenderDrawColor(sys.ren, 62, 62, 62, 255);
 		SDL_RenderClear(sys.ren);
 		for (std::shared_ptr<Component> c : comps)
 			c->render();
@@ -75,6 +73,7 @@ void Session::run() {
 		int delay = nextTick - SDL_GetTicks();
 		if (delay > 0)
 			SDL_Delay(delay);
+        counter++;
 	}
 }
 
