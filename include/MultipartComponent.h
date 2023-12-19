@@ -18,7 +18,7 @@ public:
     void addTexture(std::shared_ptr<MultipartTexture> tex);
     void removeTexture(int index);
     void removeTexture(std::shared_ptr<MultipartTexture> tex);
-    void setTexture(int index);
+    void setTexture(size_t index);
     void nextTexture();
     ~MultipartComponent();
 protected:
@@ -28,7 +28,7 @@ protected:
     }
 private:
     std::vector<std::shared_ptr<MultipartTexture>> textures;
-    int current_texture;
+    std::size_t current_texture;
 };
 
 #endif

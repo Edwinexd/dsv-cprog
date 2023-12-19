@@ -1,4 +1,4 @@
-#include<Component.h>
+#include <Component.h>
 #include <MultipartComponent.h>
 #include <SDL2/SDL.h>
 #include <string>
@@ -36,7 +36,10 @@ void MultipartComponent::nextTexture() {
     setTexture(++current_texture % textures.size());
 }
 
-void MultipartComponent::setTexture(int index) {
+void MultipartComponent::setTexture(std::size_t index) {
+    if (index >= textures.size()) {
+        throw std::runtime_error("Index out of bounds in MultipartComponent::setTexture");
+    }
     current_texture = index;
 }
 

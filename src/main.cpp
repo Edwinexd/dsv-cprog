@@ -12,7 +12,10 @@
 #include <MultipartImageTexture.h>
 #include <MultipartTexture.h>
 #include <MultipartComponent.h>
-
+#include <MultipartRectangleTexture.h>
+#include <Color.h>
+#include <Enemy.h>
+#include <Laser.h>
 
 /*
 *   'gResPath' is a global constant defined in "Constants.h", 
@@ -57,6 +60,24 @@ public:
 	int counter = 0;
 };
 
+class Spaceinvader : public Enemy
+{
+public:
+    static std::shared_ptr<Spaceinvader> createInstance(int x, int y, int w, int h, bool has_collission, int hp, std::string alive_image_path, std::string dead_image_path) {
+        return std::shared_ptr<Spaceinvader>(new Spaceinvader(x, y, w, h, has_collission, hp, alive_image_path, dead_image_path));
+    }
+    void shoot() {
+		std::shared_ptr<Laser> b = Laser::createInstance(getRect().x + (getRect().w/2), getRect().y + getRect().h, 5, 40, true, {0, 1}, 10);
+		ses.add(b);
+	}
+	void mouseDown(int x, int y) {
+		shoot();
+	}
+protected:
+	Spaceinvader(int x, int y, int w, int h, bool has_collission, int hp, std::string alive_path, std::string dead_path) : Enemy(x, y, w, h, has_collission, hp, alive_path, dead_path) {}
+};
+
+
 class Pistol : public Component {
 public:
 	Pistol() :Component(0, 0, 0, 0, false) {}
@@ -79,9 +100,32 @@ int main(int argc, char** argv) {
 	auto multipart = MultipartComponent::createInstance(250, 250, 250, 250, false);
 	auto multipartImageTexture1 = MultipartImageTexture::createInstance("images/alive.png");
 	auto multipartImageTexture2 = MultipartImageTexture::createInstance("images/dead.png");
+	auto multipartRectangle = MultipartRectangleTexture::createInstance(250, 250, Color(255, 0, 0, 255));
 	multipart->addTexture(multipartImageTexture1);
 	multipart->addTexture(multipartImageTexture2);
-	multipart->nextTexture();
+	multipart->addTexture(multipartRectangle);
+	multipart->setTexture(2);
+
+	auto enemy = Enemy::createInstance(100, 100, 45, 45, true, 100, "images/alive.png", "images/dead.png");
+	ses.add(enemy);
+	enemy->kill();
+
+	auto spaceinvader = Spaceinvader::createInstance(200, 200, 45, 45, true, 100, "images/alive.png", "images/dead.png");
+	const int numRows = 5;
+	const int numCols = 10;
+	const int invaderWidth = 40;
+	const int invaderHeight = 40;
+	const int invaderSpacing = 10;
+
+	for (int row = 0; row < numRows; row++) {
+		for (int col = 0; col < numCols; col++) {
+			int x = col * (invaderWidth + invaderSpacing);
+			int y = row * (invaderHeight + invaderSpacing);
+			std::shared_ptr<Spaceinvader> invader = Spaceinvader::createInstance(x, y, invaderWidth, invaderHeight, true, 100, "images/alive.png", "images/dead.png");
+			ses.add(invader);
+		}
+}
+	ses.add(spaceinvader);
 	
 	ses.add(multipart);
 
