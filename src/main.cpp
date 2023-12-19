@@ -7,6 +7,12 @@
 #include <string>
 #include <memory>
 #include <iostream>
+#include "TextComponent.h"
+#include <ImageComponent.h>
+#include <MultipartImageTexture.h>
+#include <MultipartTexture.h>
+#include <MultipartComponent.h>
+
 
 /*
 *   'gResPath' is a global constant defined in "Constants.h", 
@@ -21,10 +27,9 @@ Session ses;
 class Bullet : public Component {
 public:
 	static std::shared_ptr<Bullet> createInstance(int x) {
-        return 
-		std::make_shared<Bullet>(x);
+        return std::make_shared<Bullet>(x);
 	}
-	Bullet(int x) : Component(x, 500, 40,40){
+	Bullet(int x) : Component(x, 500, 40,40, true){
         // todo abstract away behind IMGComponent, which takes care of calculating width and height as well
 		texture = IMG_LoadTexture(sys.ren, (constants::gResPath + "images/dot40x40.bmp").c_str() );
 	}
@@ -54,7 +59,7 @@ public:
 
 class Pistol : public Component {
 public:
-	Pistol() :Component(0, 0, 0, 0) {}
+	Pistol() :Component(0, 0, 0, 0, false) {}
 	void render() const {}
 	void tick() {}
 	void mouseDown(int x, int y) {
@@ -67,6 +72,19 @@ int main(int argc, char** argv) {
 	std::shared_ptr<Pistol> pistol = std::make_shared<Pistol>();
 	ses.add(pistol);
 	// ses.play_sound("sounds/bgMusic.wav", -1);
+	auto text = TextComponent::createInstance(250, 250, 200, 200, "Hello World!");
+	ses.add(text);
+	auto image = ImageComponent::createInstance(0, 0, 100, 100, "images/png_sample.png", false);
+	ses.add(image);
+	auto multipart = MultipartComponent::createInstance(250, 250, 250, 250, false);
+	auto multipartImageTexture1 = MultipartImageTexture::createInstance("images/alive.png");
+	auto multipartImageTexture2 = MultipartImageTexture::createInstance("images/dead.png");
+	multipart->addTexture(multipartImageTexture1);
+	multipart->addTexture(multipartImageTexture2);
+	multipart->nextTexture();
+	
+	ses.add(multipart);
+
 	ses.run();
 	
 	// SDL_RenderPresent(sys.ren);

@@ -15,10 +15,12 @@ public:
 	virtual void render() const = 0;
 	SDL_Rect getRect() const { return rect; }
 	virtual void tick() = 0;
+	bool hasCollission() const { return has_collission; }
 	// std::shared_ptr<Component> getShared() { return shared_from_this(); }
 protected:
-	Component(int x, int y, int w, int h) : rect{ x,y,w,h } {}
+	Component(int x, int y, int w, int h, bool has_collission) : rect{ x,y,w,h } {}
 	SDL_Rect rect;
+	bool has_collission;
 };
 
 // TODO: Make IMGComponent, TextComponent, 

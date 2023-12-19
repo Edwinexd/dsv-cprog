@@ -1,5 +1,6 @@
 #include "System.h"
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 System::System() {
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -7,6 +8,7 @@ System::System() {
     ren = SDL_CreateRenderer(win, -1, 0);
     Mix_OpenAudio(44100, AUDIO_S16SYS, 2, 4096);
     sounds = std::vector<Mix_Chunk*>();
+    TTF_Init();
 }
 
 System::~System() {
@@ -17,6 +19,7 @@ System::~System() {
     Mix_CloseAudio();
     SDL_DestroyRenderer(ren);
     SDL_DestroyWindow(win);
+    TTF_Quit();
     SDL_Quit();
 }
 
