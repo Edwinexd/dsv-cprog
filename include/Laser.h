@@ -1,0 +1,25 @@
+#ifndef LASER_H
+#define LASER_H
+#include <MultipartComponent.h>
+#include <Direction.h>
+
+class Laser : public MultipartComponent
+{
+public:
+    static std::shared_ptr<Laser> createInstance(int x, int y, int w, int h, bool has_collission, Direction direction, int damage) {
+        return std::shared_ptr<Laser>(new Laser(x, y, w, h, has_collission, direction, damage));
+    }
+    void tick() override;
+    int getDamage() const {
+        return damage;
+    }
+protected:
+    Laser(int x, int y, int w, int h, bool has_collission, Direction direction, int damage);
+private:
+    Direction direction;
+    int damage;
+    unsigned char ticks = 0;
+};
+
+
+#endif
