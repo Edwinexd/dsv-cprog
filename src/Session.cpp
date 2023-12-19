@@ -130,11 +130,11 @@ void Session::run()
                     }
                     break;
                 case SDL_MOUSEBUTTONDOWN:
-                    for (std::shared_ptr<Component> c : comps)
+                    for (std::shared_ptr<Component>& c : components)
                         c->mouseDown(event.button.x, event.button.y);
                     break;
                 case SDL_MOUSEBUTTONUP:
-                    for (std::shared_ptr<Component> c : comps)
+                    for (std::shared_ptr<Component>& c : components)
                         c->mouseUp(event.button.x, event.button.y);
                     break;
             }
