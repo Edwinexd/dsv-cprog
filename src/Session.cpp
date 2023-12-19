@@ -1,8 +1,13 @@
 #include <SDL2/SDL.h>
+#include <stdexcept>
 #include "Session.h"
 
 void Session::add_component(std::shared_ptr<Component> comp)
 {
+    if(comp.get() == nullptr)
+    {
+        throw std::runtime_error("Component is nullptr");
+    }
     for(auto & component : this->components)
     {
         if(component == comp)
@@ -14,13 +19,24 @@ void Session::add_component(std::shared_ptr<Component> comp)
 }
 void Session::remove_component(std::shared_ptr<Component> comp)
 {
-    for(std::size_t i = 0; i < this->components.size(); i++)
+
+    this->remove_queue.push_back(comp);
+
+}
+
+void Session::removed_queued()
+{
+    for(auto & comp : this->remove_queue)
     {
-        if(comp == this->components.at(i))
+        for(std::size_t i = 0; i < this->components.size(); i++)
         {
-            this->components.erase(this->components.begin() + i);
+            if(comp == this->components.at(i))
+            {
+                this->components.erase(this->components.begin() + i);
+            }
         }
     }
+    this->remove_queue.clear();
 }
 
 void Session::register_key_event(KeyEventCallback callback) {
@@ -157,6 +173,8 @@ void Session::run()
         {
             component->render();
         }
+
+        this->removed_queued();
         SDL_RenderPresent(this->ren);
         int delay = nextTick - SDL_GetTicks();
         if (delay > 0)
