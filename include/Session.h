@@ -33,6 +33,7 @@ private:
 	std::unordered_map<int32_t , std::vector<KeyEventCallback>> key_events;
 
     void remove_queued();
+	void add_queued();
 public:
 
 	Session() : window_data(0,0,0,0)
