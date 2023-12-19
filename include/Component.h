@@ -14,15 +14,15 @@ public:
 	virtual void keyDown(SDL_Keycode key) {}
 	virtual void keyUp(SDL_Keycode key) {}
 	virtual void render() const = 0;
-	SDL_Rect get_rect() const { return rect; }
+    SDL_Rect get_rect() const { return rect; } // TODO: shared_pointer??
 	virtual void tick() = 0;
 	bool has_collision() const { return collision; }
 	void set_has_collision(bool c) { this->collision = c; }
 	// std::shared_ptr<Component> getShared() { return shared_from_this(); }
 protected:
-	Component(Session* session, int x, int y, int w, int h, bool has_collision) : rect{ x,y,w,h }, session(session) {}
+	Component(std::shared_ptr<Session>session, int x, int y, int w, int h, bool has_collision) : rect{ x,y,w,h }, session(std::shared_ptr(session)) {}
 	SDL_Rect rect;
-	Session* session;	
+    std::shared_ptr<Session> session;
 private:
 	bool collision;
 };

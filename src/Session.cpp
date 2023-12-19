@@ -65,7 +65,9 @@ void Session::check_collision(std::shared_ptr<Component>& src) {
         for (auto& other_component : this->components) {
             if (src != other_component) //TODO: AND IF has_collision()
             {
-                if (SDL_HasIntersection(&src->get_rect(), &other_component->get_rect())) {
+                auto src_rect = src->get_rect();
+                auto comp_rect = other_component->get_rect();
+                if (SDL_HasIntersection(&src_rect, &comp_rect)) {
                     src->on_collision(other_component);
                 }
             }

@@ -1,14 +1,17 @@
 #ifndef SESSION_H
 #define SESSION_H
 
-#include "Component.h"
-#include "KeyEventCallback.h"
+
 #include <vector>
 #include <unordered_map>
 #include <string>
 #include <memory>
 #include <SDL2/SDL_mixer.h>
 #include "System.h"
+
+class KeyEventCallback;
+class Component;
+
 struct WindowInformation
 {
     int w, h, x, y;
@@ -30,7 +33,7 @@ private:
 	std::unordered_map<int32_t , std::vector<KeyEventCallback>> key_events;
 public:
 
-	Session(WindowInformation n_win_info) : window_data(n_win_info)
+	Session() : window_data(0,0,0,0)
 	{
 		components = std::vector<std::shared_ptr<Component>>();
 		add_queue = std::vector<std::shared_ptr<Component>>();
@@ -38,6 +41,8 @@ public:
 		key_events = std::unordered_map<int32_t , std::vector<KeyEventCallback>>();
 		win = sys.win;
 		ren = sys.ren;
+        SDL_GetWindowSize(win, &window_data.w, &window_data.h);
+        SDL_GetWindowPosition(win, &window_data.x, &window_data.y);
 	}
 
 
@@ -55,6 +60,8 @@ public:
 	void run();
 	void play_sound(std::string path, int loops);
 };
+#include "Component.h"
+#include "KeyEventCallback.h"
 
 /*
 class Session

@@ -1,3 +1,5 @@
+#ifndef KEYEVENTCALLBACK_H
+#define KEYEVENTCALLBACK_H
 #include "Component.h"
 #include "Constants.h"
 #include <memory>
@@ -51,5 +53,7 @@ class KeyEventCallback
     }
     
 };
+
+#endif
 
 
