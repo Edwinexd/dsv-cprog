@@ -7,6 +7,7 @@
 #include <vector>
 #include "Constants.h"
 
+/*
 struct System
 {
 	System();
@@ -22,7 +23,7 @@ struct System
 	// vector for storing all the sounds
 	std::vector<Mix_Chunk*> sounds;
 };
-
+*/
 extern System sys;
 
 #endif
