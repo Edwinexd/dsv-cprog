@@ -29,7 +29,7 @@ public:
 
     int32_t getKeyCode() const
     {
-        return SDL_GetKeyFromName(assigned_key.c_str())
+        return SDL_GetKeyFromName(assigned_key.c_str());
     }
 
     void operator()(KeyPressType press_type) const
