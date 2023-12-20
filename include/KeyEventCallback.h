@@ -20,16 +20,16 @@ class KeyEventCallback
 
 private:
     std::vector<std::string> assigned_key;
-    std::function<void(KeyPressType, Component&)> callback_fn;
+    std::function<void(std::string , KeyPressType, Component&)> callback_fn;
     Component* target_comp;
 public:
 
-    KeyEventCallback(std::string n_key, std::function<void(KeyPressType, Component&)> n_cfn, Component& n_comp) : assigned_key(std::vector<std::string>()), callback_fn(std::move(n_cfn)), target_comp(&n_comp)
+    KeyEventCallback(std::string n_key, std::function<void(std::string , KeyPressType, Component&)> n_cfn, Component& n_comp) : assigned_key(std::vector<std::string>()), callback_fn(std::move(n_cfn)), target_comp(&n_comp)
     {
         assigned_key.push_back(n_key);
     }
 
-    KeyEventCallback(std::vector<std::string> n_key, std::function<void(KeyPressType, Component&)> n_cfn, Component& n_comp) : assigned_key(n_key), callback_fn(std::move(n_cfn)), target_comp(&n_comp)
+    KeyEventCallback(std::vector<std::string> n_key, std::function<void(std::string ,KeyPressType, Component&)> n_cfn, Component& n_comp) : assigned_key(n_key), callback_fn(std::move(n_cfn)), target_comp(&n_comp)
     {
     }
 
@@ -44,9 +44,10 @@ public:
         return ret;
     }
 
-    void operator()(KeyPressType press_type) const
+    void operator()(int32_t key, KeyPressType press_type) const
     {
-        callback_fn(press_type, *target_comp);
+
+        callback_fn(SDL_GetKeyName(key), press_type, *target_comp);
     }
 
     Component& get_component() const

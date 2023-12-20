@@ -45,7 +45,7 @@ private:
     Direction direction = {0, 0};
     unsigned char ticks_since_last_shot = 0;
 
-    std::function<void(KeyPressType, Component&)> right_callback = [this](KeyPressType t, Component& c) {
+    std::function<void(std::string ,KeyPressType, Component&)> right_callback = [this](std::string key_pressed,KeyPressType t, Component& c) {
         if (t == KeyPressType::DOWN) {
             this->direction = {3, 0};
         } else {
@@ -54,7 +54,7 @@ private:
             }
         }
     };
-    std::function<void(KeyPressType, Component&)> left_callback = [this](KeyPressType t, Component& c) {
+    std::function<void(std::string ,KeyPressType, Component&)> left_callback = [this](std::string key_pressed ,KeyPressType t, Component& c) {
         if (t == KeyPressType::DOWN) {
             this->direction = {-3, 0};
         } else {

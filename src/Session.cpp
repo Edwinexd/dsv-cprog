@@ -158,7 +158,7 @@ void Session::run()
                 {
                     for (const auto &func : this->key_events.at(event.key.keysym.sym))
                     {
-                        func(KeyPressType::UP);
+                        func(event.key.keysym.sym ,KeyPressType::UP);
                     }
                 }
                 break;
@@ -167,7 +167,7 @@ void Session::run()
                 {
                     for (const auto &func : this->key_events.at(event.key.keysym.sym))
                     {
-                        func(KeyPressType::DOWN);
+                        func(event.key.keysym.sym, KeyPressType::DOWN);
                     }
                 }
                 break;
