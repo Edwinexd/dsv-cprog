@@ -4,7 +4,7 @@
 #include "Constants.h"
 #include <memory>
 #include <utility>
-
+#include <functional>
 
 
 enum KeyPressType{
@@ -17,23 +17,24 @@ class Component;
 class KeyEventCallback
 {
 
+
     private:
-        int32_t assigned_key;
-        void (*callback_fn)(int32_t , KeyPressType);
+        std::string assigned_key;
+        std::function<void(KeyPressType, Component&)> callback_fn;
         Component& target_comp;
     public:
 
-    KeyEventCallback(int32_t n_key, void (*n_cfn)(int32_t, KeyPressType), Component& n_comp) : assigned_key(n_key), callback_fn(n_cfn), target_comp(n_comp)
+    KeyEventCallback(std::string n_key, std::function<void(KeyPressType, Component&)> n_cfn, Component& n_comp) : assigned_key(n_key), callback_fn(std::move(n_cfn)), target_comp(n_comp)
     {}
 
     int32_t getKeyCode() const
     {
-        return assigned_key;
+        return SDL_GetKeyFromName(assigned_key.c_str())
     }
 
     void operator()(KeyPressType press_type) const
     {
-        callback_fn(assigned_key, press_type);
+        callback_fn(press_type, target_comp);
     }
 
     Component& get_component() const
@@ -41,17 +42,9 @@ class KeyEventCallback
         return target_comp;
     }
 
-    friend bool operator==(const std::shared_ptr<Component>& lhs, const KeyEventCallback rhs)
+    friend bool operator==(Component* lhs, const KeyEventCallback& rhs)
     {
-        // TODO Erik what do you want to do here?
-        return false;/*
-        if(auto src = std::dynamic_pointer_cast<Component>(rhs.target_comp))
-        {
-            return lhs == src;
-        }
-        else {
-            return false;
-        }*/
+        return lhs == &rhs.target_comp;
     }
     
 };
