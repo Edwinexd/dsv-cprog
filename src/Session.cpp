@@ -3,7 +3,7 @@
 #include "Session.h"
 #include <iostream>
 
-void Session::add_component(std::unique_ptr<Component> comp)
+std::shared_ptr<Component> Session::add_component(std::unique_ptr<Component> comp)
 {
     if (comp.get() == nullptr)
     {
@@ -11,14 +11,17 @@ void Session::add_component(std::unique_ptr<Component> comp)
     }
     for (auto& component : this->components)
     {
-        if (component == comp)
+        if (component.get() == comp.get())
         {
-            return;
+            return component;
         }
     }
-    this->add_queue.push_back(std::move(comp));
+    auto ptr = comp.release();
+    auto shared = std::shared_ptr<Component>(ptr);
+    this->add_queue.push_back(shared);
+    return shared;
 }
-void Session::remove_component(Component* comp)
+void Session::remove_component(std::shared_ptr<Component> comp)
 {
 
     this->remove_queue.push_back(comp);
@@ -30,7 +33,7 @@ void Session::remove_queued()
     {
         for (auto i = components.begin(); i != components.end();)
         {
-            if ((*i).get() == comp)
+            if (i->get() == comp.get())
             {
                 i = components.erase(i);
             }
@@ -68,8 +71,6 @@ void Session::unregister_key_event(Component& src)
         auto vector = key_event.second;
         for (auto iter = vector.begin(); iter != vector.end(); )
         {
-            // TODO Review this Erik
-            /*
             if (src == *iter)
             {
                 iter = vector.erase(iter);
@@ -77,7 +78,7 @@ void Session::unregister_key_event(Component& src)
             else
             {
                 iter++;
-            }*/
+            }
         }
     }
 }
@@ -87,37 +88,42 @@ void Session::unregister_key_event(Component& src, int32_t key_code)
     if (this->key_events.count(key_code) == 1)
     {
         auto vector = this->key_events.at(key_code);
-        for (auto iter = vector.begin(); iter != vector.end(); iter++)
+        for (auto iter = vector.begin(); iter != vector.end(); )
         {
-            // TODO Review this Erik
-            /*
             if (src == *iter)
             {
-                vector.erase(iter);
+                iter = vector.erase(iter);
             }
-            */
+            else
+            {
+                iter++;
+            }
         }
     }
 };
 
-void Session::check_collision(Component& src)
+void Session::check_collision(std::shared_ptr<Component> src)
 {
-    // check if components' rects intersect
-    for (auto &other_component : this->components)
+    if (!src->has_collision())
     {
-        if (&(*other_component) == &src)
+        return;
+    }
+    // check if components' rects intersect
+    for (auto other_component : this->components)
+    {
+        if (other_component == src)
         {
             continue;
         }
-        if (!other_component->has_collision() || !src.has_collision())
+        if (!other_component->has_collision())
         {
             continue;
         }
-        auto src_rect = src.get_rect();
+        auto src_rect = src->get_rect();
         auto comp_rect = other_component->get_rect();
         if (SDL_HasIntersection(&src_rect, &comp_rect))
         {
-            src.on_collision(&(*other_component));
+            src->on_collision(other_component);
         }
     }
 }
@@ -189,11 +195,11 @@ void Session::run()
             component->tick();
             if (component->get_rect().x < 0 - 50 || component->get_rect().x > this->window_data.w + 50 || component->get_rect().y < 0 - 50 || component->get_rect().y > this->window_data.h + 50)
             {
-                this->remove_component(component.get());
+                this->remove_component(component);
             }
             else
             {
-                this->check_collision((*component)); // Pass the raw pointer of the component
+                this->check_collision(component); // Pass the raw pointer of the component
             }
         }
 

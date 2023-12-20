@@ -9,6 +9,7 @@ public:
         return std::unique_ptr<Enemy>(new Enemy(session, x, y, w, h, has_collision, hp, alive_image_path, dead_image_path));
     }
     void tick() override;
+    void handle_death_tick();
     void kill() {
         hp = 0;
         dead = true;

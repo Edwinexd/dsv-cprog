@@ -8,7 +8,7 @@ class Component
 {
 public:
 	// TODO: the following should be allowed to be set as lambdas via Component.onCollision = [](Component* other) { ... };
-	virtual void on_collision(Component* other) {}
+	virtual void on_collision(std::shared_ptr<Component> other) {}
 	virtual void mouseDown(int x, int y) {}
 	virtual void mouseUp(int x, int y) {}
 	virtual void keyDown(SDL_Keycode key) {}
@@ -21,7 +21,7 @@ public:
 	// std::shared_ptr<Component> getShared() { return shared_from_this(); }
 	virtual ~Component() = default;
 protected:
-	Component(std::shared_ptr<Session>session, int x, int y, int w, int h, bool has_collision) : rect{ x,y,w,h }, session(std::shared_ptr(session)) {}
+	Component(std::shared_ptr<Session>session, int x, int y, int w, int h, bool has_collision) : rect{ x,y,w,h }, session(std::shared_ptr(session)), collision(has_collision) {}
 	SDL_Rect rect;
     std::shared_ptr<Session> session;
 private:

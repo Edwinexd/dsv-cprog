@@ -16,6 +16,7 @@
 #include <Enemy.h>
 #include <Laser.h>
 #include <Spaceinvader.h>
+#include <InvadersComponent.h>
 
 /*
 *   'gResPath' is a global constant defined in "Constants.h", 
@@ -57,15 +58,11 @@ protected:
 int main(int argc, char** argv) {
 	std::shared_ptr<Session> g_session = std::make_shared<Session>();
 	// g_session->play_sound("sounds/bgMusic.wav", -1);
-    std::cout << "Ticking: 1" << std::endl;
 	auto text = TextComponent::createInstance(g_session, 250, 250, 200, 200, "Hello World!");
 	g_session->add_component(std::move(text));
-    std::cout << "Ticking: 2" << std::endl;
 	auto image = ImageComponent::createInstance(g_session, 0, 0, 100, 100, "images/png_sample.png", false);
 	g_session->add_component(std::move(image));
-    std::cout << "Ticking: 3" << std::endl;
-	std::unique_ptr<MultipartComponent> multipart = MultipartComponent::createInstance(g_session, 250, 250, 250, 250, false);
-    std::cout << "Ticking: 4" << std::endl;
+	std::unique_ptr<MultipartComponent> multipart = MultipartComponent::createInstance(g_session, 250, 250, 250, 250, true);
 	auto multipartImageTexture1 = MultipartImageTexture::createInstance(g_session, "images/alive.png");
 	auto multipartImageTexture2 = MultipartImageTexture::createInstance(g_session, "images/dead.png");
 	auto multipartRectangle = MultipartRectangleTexture::createInstance(g_session, 250, 250, Color(255, 0, 0, 255));
@@ -73,31 +70,20 @@ int main(int argc, char** argv) {
 	multipart->addTexture(multipartImageTexture2);
 	multipart->addTexture(multipartRectangle);
 	multipart->setTexture(2);
-    std::cout << "Ticking: 5" << std::endl;
 
 	auto enemy = Enemy::createInstance(g_session, 100, 100, 45, 45, true, 100, "images/alive.png", "images/dead.png");
 	enemy->damage(100);
 	g_session->add_component(std::move(enemy));
 	// kill enemy
 	std::cout << (enemy.get() == nullptr) << std::endl;
-    std::cout << "Ticking: 6" << std::endl;
 	
-	auto spaceinvader = Spaceinvader::createInstance(g_session, 200, 200, 45, 45, 100, "images/alive.png", "images/dead.png");
-    std::cout << "Ticking: 7" << std::endl;
-	const int numRows = 5;
-	const int numCols = 10;
-	const int invaderWidth = 40;
-	const int invaderHeight = 40;
-	const int invaderSpacing = 10;
+	auto spaceinvader = Spaceinvader::createInstance(g_session, 200, 200, 45, 45, 100, "images/alive.png", "images/dead.png", 29);
+	
+	// Create invaders component
+	auto invaders = InvadersComponent::createInstance(g_session, 100, 100, 3, 10, 45, 45, 10);
 
-	for (int row = 0; row < numRows; row++) {
-		for (int col = 0; col < numCols; col++) {
-			int x = col * (invaderWidth + invaderSpacing);
-			int y = row * (invaderHeight + invaderSpacing);
-			auto invader = Spaceinvader::createInstance(g_session, x, y, invaderWidth, invaderHeight, 100, "images/alive.png", "images/dead.png");
-			g_session->add_component(std::move(invader));
-		}
-}
+	g_session->add_component(std::move(invaders));
+
 	g_session->add_component(std::move(spaceinvader));
 	
 	g_session->add_component(std::move(multipart));

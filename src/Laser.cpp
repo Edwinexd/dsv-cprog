@@ -18,10 +18,10 @@ void Laser::tick() {
     }
 }
 
-void Laser::on_collision(Component* other) {
+void Laser::on_collision(std::shared_ptr<Component> other) {
     rect.y = -10000;
     // cast other to enemy
-    if (auto enemy = dynamic_cast<Spaceinvader*>(other)) {
+    if (auto enemy = std::dynamic_pointer_cast<Enemy>(other)) {
         enemy->damage(damage);
     }
 }

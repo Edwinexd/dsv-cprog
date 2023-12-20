@@ -8,13 +8,18 @@ Enemy::Enemy(std::shared_ptr<Session> session, int x, int y, int w, int h, bool 
 }
 
 void Enemy::tick() {
-    if (dead) {
-        ticks_till_removal--;
-        if (ticks_till_removal % 18 == 0) {
-            nextTexture();
-        }
-        if (ticks_till_removal <= 0) {
-            rect.y = -10000;
-        }
+    handle_death_tick();
+}
+
+void Enemy::handle_death_tick() {
+    if (!dead) {
+        return;
+    }
+    ticks_till_removal--;
+    if (ticks_till_removal % 18 == 0) {
+        nextTexture();
+    }
+    if (ticks_till_removal <= 0) {
+        rect.y = -10000;
     }
 }

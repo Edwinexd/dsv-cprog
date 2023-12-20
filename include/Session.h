@@ -28,9 +28,9 @@ private:
 
 
     WindowInformation window_data;
-	std::vector<std::unique_ptr<Component>> components;
-	std::vector<std::unique_ptr<Component>> add_queue;
-	std::vector<Component*> remove_queue;
+	std::vector<std::shared_ptr<Component>> components;
+	std::vector<std::shared_ptr<Component>> add_queue;
+	std::vector<std::shared_ptr<Component>> remove_queue;
 	std::unordered_map<int32_t , std::vector<KeyEventCallback>> key_events;
 
     void remove_queued();
@@ -39,9 +39,9 @@ public:
 
 	Session() : window_data(0,0,0,0)
 	{
-		components = std::vector<std::unique_ptr<Component>>();
-		add_queue = std::vector<std::unique_ptr<Component>>();
-		remove_queue = std::vector<Component*>();
+		components = std::vector<std::shared_ptr<Component>>();
+		add_queue = std::vector<std::shared_ptr<Component>>();
+		remove_queue = std::vector<std::shared_ptr<Component>>();
 		key_events = std::unordered_map<int32_t , std::vector<KeyEventCallback>>();
 		win = sys.win;
 		ren = sys.ren;
@@ -51,8 +51,8 @@ public:
 
 
 
-	void add_component(std::unique_ptr<Component> comp);
-	void remove_component(Component* comp);
+	std::shared_ptr<Component> add_component(std::unique_ptr<Component> comp);
+	void remove_component(std::shared_ptr<Component> comp);
 	void register_key_event(KeyEventCallback callback);
 	void unregister_key_event(Component& src); // remove every callback from that component
 	void unregister_key_event(Component& src, int32_t key_code);
@@ -60,7 +60,7 @@ public:
     {
         return window_data;
     }
-	void check_collision(Component& src);
+	void check_collision(std::shared_ptr<Component> src);
 	void run();
 	void play_sound(std::string path, int loops);
 };

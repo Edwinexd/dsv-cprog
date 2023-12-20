@@ -10,7 +10,7 @@ public:
         return std::unique_ptr<Laser>(new Laser(session, x, y, w, h, has_collision, direction, damage));
     }
     void tick() override;
-    void on_collision(Component* other) override;
+    void on_collision(std::shared_ptr<Component> other) override;
     int getDamage() const {
         return damage;
     }
