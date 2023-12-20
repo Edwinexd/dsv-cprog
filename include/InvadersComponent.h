@@ -26,6 +26,50 @@ public:
         }
     }
 
+    bool shootBottomOfColumn(int col)
+    {
+        for (int row = numRows - 1; row >= 0; row--)
+        {
+            if (invaders[col][row].get() != nullptr)
+            {
+                auto invader = invaders[col][row];
+                if (invader->is_dead())
+                {
+                    invaders[col][row] = nullptr;
+                    continue;
+                }
+                invader->shoot();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void shootRandomInvader()
+    {
+        std::vector<int> columns;
+        for (int col = 0; col < numCols; col++)
+        {
+            if (!invaders[col].empty())
+            {
+                columns.push_back(col);
+            }
+        }
+        if (columns.empty())
+        {
+            return;
+        }
+        // Shuffle columns
+        std::random_shuffle(columns.begin(), columns.end());
+        for (auto col : columns)
+        {
+            if (shootBottomOfColumn(col))
+            {
+                return;
+            }
+        }
+    }
+
     void shootBottomInvaders()
     {
         for (int col = 0; col < numCols; col++)
@@ -60,7 +104,7 @@ public:
         }
         if (tick_count % 100 == 0)
         {
-            shootBottomInvaders();
+            shootRandomInvader();
         }
     }
 

@@ -63,10 +63,16 @@ private:
             }
         }
     };
+    std::function<void(KeyPressType, Component&)> space_callback = [this](KeyPressType t, Component& c) {
+        if (t == KeyPressType::DOWN) {
+            this->shoot();
+        }
+    };
 
     Player(std::shared_ptr<Session> session, int x, int y, int w, int h, bool has_collision, int hp, std::string alive_path, std::string dead_path) : Enemy(session, x, y, w, h, true, hp, alive_path, dead_path) {
         session->register_key_event(KeyEventCallback(std::string("Right"), right_callback, *this));
         session->register_key_event(KeyEventCallback(std::string("Left"), left_callback, *this));
+        session->register_key_event(KeyEventCallback(std::string("Space"), space_callback, *this));
     };
 };
 

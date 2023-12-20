@@ -21,7 +21,7 @@ private:
     unsigned int ticks_loop = 0;
     unsigned int active_direction = 0;
     // vector of Direction objects
-    std::vector<Direction> directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {0, 0}, {0, 0}};
+    std::vector<Direction> directions = {{1, 0}, {-1, 0}, {1, 0}, {-1, 0}, {2, 0}, {-2, 0}};
 };
 
 

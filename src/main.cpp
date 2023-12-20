@@ -63,6 +63,8 @@ int main(int argc, char** argv) {
 	g_session->add_component(std::move(text));
 	auto image = ImageComponent::createInstance(g_session, 0, 0, 100, 100, "images/png_sample.png", false);
 	g_session->add_component(std::move(image));
+	auto bg_image = ImageComponent::createInstance(g_session, 0, 0, 850, 850, "images/dalle_generated_bg.jpg", false);
+	g_session->add_component(std::move(bg_image));
 	std::unique_ptr<MultipartComponent> multipart = MultipartComponent::createInstance(g_session, 250, 250, 250, 250, true);
 	auto multipartImageTexture1 = MultipartImageTexture::createInstance(g_session, "images/alive.png");
 	auto multipartImageTexture2 = MultipartImageTexture::createInstance(g_session, "images/dead.png");
@@ -91,7 +93,7 @@ int main(int argc, char** argv) {
 
 	g_session->add_component(std::move(spaceinvader));
 	
-	g_session->add_component(std::move(multipart));
+	// g_session->add_component(std::move(multipart));
 
 	g_session->run();
 	
