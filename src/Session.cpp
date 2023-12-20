@@ -71,7 +71,7 @@ void Session::unregister_key_event(Component& src)
         auto vector = key_event.second;
         for (auto iter = vector.begin(); iter != vector.end(); )
         {
-            if (src == *iter)
+            if (&src == *iter)
             {
                 iter = vector.erase(iter);
             }
@@ -90,7 +90,7 @@ void Session::unregister_key_event(Component& src, int32_t key_code)
         auto vector = this->key_events.at(key_code);
         for (auto iter = vector.begin(); iter != vector.end(); )
         {
-            if (src == *iter)
+            if (&src == *iter)
             {
                 iter = vector.erase(iter);
             }
