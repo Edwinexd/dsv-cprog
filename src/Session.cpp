@@ -58,11 +58,14 @@ void Session::add_queued()
 
 void Session::register_key_event(KeyEventCallback callback)
 {
-    if (this->key_events.count(callback.getKeyCode()) == 0)
+    for(auto key : callback.getKeyCode())
     {
-        this->key_events.insert(std::make_pair(callback.getKeyCode(), std::vector<KeyEventCallback>()));
+        if (this->key_events.count(key) == 0)
+        {
+            this->key_events.insert(std::make_pair(key, std::vector<KeyEventCallback>()));
+        }
+        this->key_events.at(key).push_back(callback);
     }
-    this->key_events.at(callback.getKeyCode()).push_back(callback);
 }
 
 void Session::unregister_key_event(Component& src)
