@@ -35,6 +35,7 @@ void Session::remove_queued()
         {
             if (i->get() == comp.get())
             {
+                this->unregister_key_event(reinterpret_cast<Component &>(*i));
                 i = components.erase(i);
             }
             else
