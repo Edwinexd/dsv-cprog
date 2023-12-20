@@ -20,11 +20,11 @@ class KeyEventCallback
 
 private:
     std::string assigned_key;
-    std::function<void(KeyPressType, Component&)> callback_fn;
-    Component& target_comp;
+    std::function<void(KeyPressType, std::shared_ptr<Component>)> callback_fn;
+    std::shared_ptr<Component> target_comp;
 public:
 
-    KeyEventCallback(std::string n_key, std::function<void(KeyPressType, Component&)> n_cfn, Component& n_comp) : assigned_key(n_key), callback_fn(std::move(n_cfn)), target_comp(n_comp)
+    KeyEventCallback(std::string n_key, std::function<void(KeyPressType, std::shared_ptr<Component>)> n_cfn, std::shared_ptr<Component> n_comp) : assigned_key(n_key), callback_fn(std::move(n_cfn)), target_comp(n_comp)
     {}
 
     int32_t getKeyCode() const
@@ -37,14 +37,14 @@ public:
         callback_fn(press_type, target_comp);
     }
 
-    Component& get_component() const
+    std::shared_ptr<Component> get_component() const
     {
         return target_comp;
     }
 
     friend bool operator==(Component* lhs, const KeyEventCallback& rhs)
     {
-        return lhs == &rhs.target_comp;
+        return lhs == rhs.target_comp.get();
     }
 
 };
