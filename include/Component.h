@@ -4,7 +4,7 @@
 #include <memory>
 #include "Session.h"
 
-class Component
+class Component : public std::enable_shared_from_this<Component>
 {
 public:
 	// TODO: the following should be allowed to be set as lambdas via Component.onCollision = [](Component* other) { ... };

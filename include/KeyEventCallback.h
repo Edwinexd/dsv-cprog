@@ -33,6 +33,10 @@ public:
     {
     }
 
+    KeyEventCallback(std::initializer_list<std::string> n_key, std::function<void(std::string ,KeyPressType, Component&)> n_cfn, Component& n_comp) : assigned_key(n_key), callback_fn(std::move(n_cfn)), target_comp(&n_comp)
+    {
+    }
+
 
     std::vector<int32_t> getKeyCode() const
     {

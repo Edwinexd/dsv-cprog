@@ -35,7 +35,7 @@ void Session::remove_queued()
         {
             if (i->get() == comp.get())
             {
-                this->unregister_key_event(reinterpret_cast<Component &>(*i));
+                this->unregister_key_event(comp.get());
                 i = components.erase(i);
             }
             else
@@ -68,14 +68,14 @@ void Session::register_key_event(KeyEventCallback callback)
     }
 }
 
-void Session::unregister_key_event(Component& src)
+void Session::unregister_key_event(Component* src)
 {
     for (auto &key_event : this->key_events)
     {
         auto vector = key_event.second;
         for (auto iter = vector.begin(); iter != vector.end(); )
         {
-            if (&src == *iter)
+            if (&(iter->get_component()) == src)
             {
                 iter = vector.erase(iter);
             }
@@ -84,17 +84,18 @@ void Session::unregister_key_event(Component& src)
                 iter++;
             }
         }
+        this->key_events.at(key_event.first) = vector;
     }
 }
 
-void Session::unregister_key_event(Component& src, int32_t key_code)
+void Session::unregister_key_event(Component* src, int32_t key_code)
 {
     if (this->key_events.count(key_code) == 1)
     {
         auto vector = this->key_events.at(key_code);
         for (auto iter = vector.begin(); iter != vector.end(); )
         {
-            if (&src == *iter)
+            if (src == &(iter->get_component()))
             {
                 iter = vector.erase(iter);
             }
@@ -103,6 +104,7 @@ void Session::unregister_key_event(Component& src, int32_t key_code)
                 iter++;
             }
         }
+        this->key_events.at(key_code) = vector;
     }
 };
 
