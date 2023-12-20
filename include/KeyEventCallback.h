@@ -20,10 +20,10 @@ class KeyEventCallback
     private:
         int32_t assigned_key;
         void (*callback_fn)(int32_t , KeyPressType);
-        std::weak_ptr<Component> target_comp;
+        Component& target_comp;
     public:
 
-    KeyEventCallback(int32_t n_key, void (*n_cfn)(int32_t, KeyPressType), std::weak_ptr<Component> n_comp) : assigned_key(n_key), callback_fn(n_cfn), target_comp(std::move(n_comp))
+    KeyEventCallback(int32_t n_key, void (*n_cfn)(int32_t, KeyPressType), Component& n_comp) : assigned_key(n_key), callback_fn(n_cfn), target_comp(n_comp)
     {}
 
     int32_t getKeyCode() const
@@ -36,20 +36,22 @@ class KeyEventCallback
         callback_fn(assigned_key, press_type);
     }
 
-    std::weak_ptr<Component> get_component() const
+    Component& get_component() const
     {
-        return std::weak_ptr(target_comp);
+        return target_comp;
     }
 
     friend bool operator==(const std::shared_ptr<Component>& lhs, const KeyEventCallback rhs)
     {
-        if(auto src = rhs.target_comp.lock())
+        // TODO Erik what do you want to do here?
+        return false;/*
+        if(auto src = std::dynamic_pointer_cast<Component>(rhs.target_comp))
         {
             return lhs == src;
         }
         else {
             return false;
-        }
+        }*/
     }
     
 };

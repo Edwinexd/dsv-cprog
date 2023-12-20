@@ -24,9 +24,6 @@
 *   Use it through its namespace, 'constants::gResPath'.
 */
 
-Session ses;
-std::shared_ptr<Session> g_session = std::make_shared<Session>(ses);
-
 /*
 class Spaceinvader : public Enemy
 {
@@ -36,7 +33,7 @@ public:
     }
     void shoot() {
 		std::shared_ptr<Laser> b = Laser::createInstance(g_session, get_rect().x + (get_rect().w/2), get_rect().y + get_rect().h, 5, 40, true, {0, 1}, 10);
-		ses.add_component(b);
+		g_session->add_component(b);
 	}
 	void mouseDown(int x, int y) {
 		shoot();
@@ -53,17 +50,22 @@ protected:
 // 	void tick() {}
 // 	void mouseDown(int x, int y) {
 // 		std::shared_ptr<Bullet> b = Bullet::createInstance(x);
-// 		ses.add_component(b);
+// 		g_session->add_component(b);
 // 	}
 // };
 
 int main(int argc, char** argv) {
-	// ses.play_sound("sounds/bgMusic.wav", -1);
+	std::shared_ptr<Session> g_session = std::make_shared<Session>();
+	// g_session->play_sound("sounds/bgMusic.wav", -1);
+    std::cout << "Ticking: 1" << std::endl;
 	auto text = TextComponent::createInstance(g_session, 250, 250, 200, 200, "Hello World!");
-	ses.add_component(text);
+	g_session->add_component(std::move(text));
+    std::cout << "Ticking: 2" << std::endl;
 	auto image = ImageComponent::createInstance(g_session, 0, 0, 100, 100, "images/png_sample.png", false);
-	ses.add_component(image);
-	auto multipart = MultipartComponent::createInstance(g_session, 250, 250, 250, 250, false);
+	g_session->add_component(std::move(image));
+    std::cout << "Ticking: 3" << std::endl;
+	std::unique_ptr<MultipartComponent> multipart = MultipartComponent::createInstance(g_session, 250, 250, 250, 250, false);
+    std::cout << "Ticking: 4" << std::endl;
 	auto multipartImageTexture1 = MultipartImageTexture::createInstance(g_session, "images/alive.png");
 	auto multipartImageTexture2 = MultipartImageTexture::createInstance(g_session, "images/dead.png");
 	auto multipartRectangle = MultipartRectangleTexture::createInstance(g_session, 250, 250, Color(255, 0, 0, 255));
@@ -71,12 +73,17 @@ int main(int argc, char** argv) {
 	multipart->addTexture(multipartImageTexture2);
 	multipart->addTexture(multipartRectangle);
 	multipart->setTexture(2);
+    std::cout << "Ticking: 5" << std::endl;
 
 	auto enemy = Enemy::createInstance(g_session, 100, 100, 45, 45, true, 100, "images/alive.png", "images/dead.png");
-	ses.add_component(enemy);
-	enemy->kill();
-
+	enemy->damage(100);
+	g_session->add_component(std::move(enemy));
+	// kill enemy
+	std::cout << (enemy.get() == nullptr) << std::endl;
+    std::cout << "Ticking: 6" << std::endl;
+	
 	auto spaceinvader = Spaceinvader::createInstance(g_session, 200, 200, 45, 45, 100, "images/alive.png", "images/dead.png");
+    std::cout << "Ticking: 7" << std::endl;
 	const int numRows = 5;
 	const int numCols = 10;
 	const int invaderWidth = 40;
@@ -87,15 +94,15 @@ int main(int argc, char** argv) {
 		for (int col = 0; col < numCols; col++) {
 			int x = col * (invaderWidth + invaderSpacing);
 			int y = row * (invaderHeight + invaderSpacing);
-			std::shared_ptr<Spaceinvader> invader = Spaceinvader::createInstance(g_session, x, y, invaderWidth, invaderHeight, 100, "images/alive.png", "images/dead.png");
-			ses.add_component(invader);
+			auto invader = Spaceinvader::createInstance(g_session, x, y, invaderWidth, invaderHeight, 100, "images/alive.png", "images/dead.png");
+			g_session->add_component(std::move(invader));
 		}
 }
-	ses.add_component(spaceinvader);
+	g_session->add_component(std::move(spaceinvader));
 	
-	ses.add_component(multipart);
+	g_session->add_component(std::move(multipart));
 
-	ses.run();
+	g_session->run();
 	
 	// SDL_RenderPresent(sys.ren);
 	// sys.play_sound("sounds/bgMusic.wav", -1);

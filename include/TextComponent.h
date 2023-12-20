@@ -10,8 +10,8 @@
 class TextComponent : public Component
 {
 public:
-    static std::shared_ptr<TextComponent> createInstance(std::shared_ptr<Session> session, int x, int y, int w, int h, std::string text) {
-        return std::shared_ptr<TextComponent>(new TextComponent(session, x, y, w, h, text));
+    static std::unique_ptr<TextComponent> createInstance(std::shared_ptr<Session> session, int x, int y, int w, int h, std::string text) {
+        return std::unique_ptr<TextComponent>(new TextComponent(session, x, y, w, h, text));
     }
     void render() const override;
     void tick() {};

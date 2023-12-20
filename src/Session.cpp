@@ -3,26 +3,22 @@
 #include "Session.h"
 #include <iostream>
 
-int count = 0;
-
-void Session::add_component(std::shared_ptr<Component> comp)
+void Session::add_component(std::unique_ptr<Component> comp)
 {
     if (comp.get() == nullptr)
     {
         throw std::runtime_error("Component is nullptr");
     }
-    for (auto component : this->components)
+    for (auto& component : this->components)
     {
         if (component == comp)
         {
             return;
         }
     }
-    std::cout << "Adding component" << count << std::endl;
-    count++;
-    this->add_queue.push_back(comp);
+    this->add_queue.push_back(std::move(comp));
 }
-void Session::remove_component(std::shared_ptr<Component> comp)
+void Session::remove_component(Component* comp)
 {
 
     this->remove_queue.push_back(comp);
@@ -30,11 +26,11 @@ void Session::remove_component(std::shared_ptr<Component> comp)
 
 void Session::remove_queued()
 {
-    for (auto &comp : this->remove_queue)
+    for (auto comp : this->remove_queue)
     {
         for (auto i = components.begin(); i != components.end();)
         {
-            if (*i == comp)
+            if ((*i).get() == comp)
             {
                 i = components.erase(i);
             }
@@ -49,9 +45,9 @@ void Session::remove_queued()
 
 void Session::add_queued()
 {
-    for (auto &comp : this->add_queue)
+    for (auto& comp : this->add_queue)
     {
-        this->components.push_back(comp);
+        this->components.push_back(std::move(comp));
     }
     this->add_queue.clear();
 }
@@ -65,49 +61,63 @@ void Session::register_key_event(KeyEventCallback callback)
     this->key_events.at(callback.getKeyCode()).push_back(callback);
 }
 
-void Session::unregister_key_event(std::shared_ptr<Component> src)
+void Session::unregister_key_event(Component& src)
 {
     for (auto &key_event : this->key_events)
     {
         auto vector = key_event.second;
-        for (auto iter = vector.begin(); iter != vector.end(); iter++)
+        for (auto iter = vector.begin(); iter != vector.end(); )
         {
+            // TODO Review this Erik
+            /*
             if (src == *iter)
             {
-                vector.erase(iter);
+                iter = vector.erase(iter);
             }
+            else
+            {
+                iter++;
+            }*/
         }
     }
 }
 
-void Session::unregister_key_event(std::shared_ptr<Component> src, int32_t key_code)
+void Session::unregister_key_event(Component& src, int32_t key_code)
 {
     if (this->key_events.count(key_code) == 1)
     {
         auto vector = this->key_events.at(key_code);
         for (auto iter = vector.begin(); iter != vector.end(); iter++)
         {
+            // TODO Review this Erik
+            /*
             if (src == *iter)
             {
                 vector.erase(iter);
             }
+            */
         }
     }
 };
 
-void Session::check_collision(std::shared_ptr<Component> &src)
+void Session::check_collision(Component& src)
 {
     // check if components' rects intersect
     for (auto &other_component : this->components)
     {
-        if (src != other_component) // TODO: AND IF has_collision()
+        if (&(*other_component) == &src)
         {
-            auto src_rect = src->get_rect();
-            auto comp_rect = other_component->get_rect();
-            if (SDL_HasIntersection(&src_rect, &comp_rect))
-            {
-                src->on_collision(other_component);
-            }
+            continue;
+        }
+        if (!other_component->has_collision() || !src.has_collision())
+        {
+            continue;
+        }
+        auto src_rect = src.get_rect();
+        auto comp_rect = other_component->get_rect();
+        if (SDL_HasIntersection(&src_rect, &comp_rect))
+        {
+            src.on_collision(&(*other_component));
         }
     }
 }
@@ -122,7 +132,6 @@ void Session::run()
     bool exit = false;
 
     Uint32 tickInterval = 1000 / constants::FPS;
-    unsigned short counter = 0;
     while (!exit)
     {
         Uint32 nextTick = SDL_GetTicks() + tickInterval;
@@ -166,37 +175,37 @@ void Session::run()
                 }
                 break;
             case SDL_MOUSEBUTTONDOWN:
-                for (std::shared_ptr<Component> &c : components)
+                for (auto& c : this->components)
                     c->mouseDown(event.button.x, event.button.y);
                 break;
             case SDL_MOUSEBUTTONUP:
-                for (std::shared_ptr<Component> &c : components)
+                for (auto& c : this->components)
                     c->mouseUp(event.button.x, event.button.y);
                 break;
             }
         }
-        for (auto &component : this->components)
+        for (auto& component : this->components)
         {
             component->tick();
             if (component->get_rect().x < 0 - 50 || component->get_rect().x > this->window_data.w + 50 || component->get_rect().y < 0 - 50 || component->get_rect().y > this->window_data.h + 50)
             {
-                this->remove_component(component);
+                this->remove_component(component.get());
             }
             else
             {
-                this->check_collision(component); // TODO: IF has_collision()
+                this->check_collision((*component)); // Pass the raw pointer of the component
             }
         }
 
         SDL_SetRenderDrawColor(this->ren, 255, 255, 255, 255);
         SDL_RenderClear(this->ren);
-        for (auto &component : this->components)
+        this->remove_queued();
+        this->add_queued();
+        for (auto& component : this->components)
         {
             component->render();
         }
 
-        this->remove_queued();
-        this->add_queued();
         SDL_RenderPresent(this->ren);
         int delay = nextTick - SDL_GetTicks();
         if (delay > 0)

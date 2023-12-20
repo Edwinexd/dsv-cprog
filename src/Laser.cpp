@@ -10,7 +10,6 @@ Laser::Laser(std::shared_ptr<Session> session, int x, int y, int w, int h, bool 
 }
 
 void Laser::tick() {
-    std::cout << "Laser tick" << std::endl;
     rect.x += direction.dx;
     rect.y += direction.dy;
     ticks++;
@@ -19,11 +18,10 @@ void Laser::tick() {
     }
 }
 
-void Laser::on_collision(std::shared_ptr<Component> other) {
-    std::cout << "Laser collided with something" << std::endl;
+void Laser::on_collision(Component* other) {
     rect.y = -10000;
     // cast other to enemy
-    if (auto enemy = std::dynamic_pointer_cast<Spaceinvader>(other)) {
+    if (auto enemy = dynamic_cast<Spaceinvader*>(other)) {
         enemy->damage(damage);
     }
 }
