@@ -17,6 +17,7 @@
 #include <Laser.h>
 #include <Spaceinvader.h>
 #include <InvadersComponent.h>
+#include <Player.h>
 
 /*
 *   'gResPath' is a global constant defined in "Constants.h", 
@@ -81,6 +82,10 @@ int main(int argc, char** argv) {
 	
 	// Create invaders component
 	auto invaders = InvadersComponent::createInstance(g_session, 100, 100, 3, 10, 45, 45, 10);
+
+	// Create player
+	auto player = Player::createInstance(g_session, 700, 100, 50, 50, true);
+	g_session->add_component(std::move(player));
 
 	g_session->add_component(std::move(invaders));
 
