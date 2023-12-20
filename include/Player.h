@@ -40,18 +40,35 @@ public:
     }
     
 private:
+
+
     Direction direction = {0, 0};
     unsigned char ticks_since_last_shot = 0;
+
+
+    std::function<void(KeyPressType, Component&)> right_callback = [this](KeyPressType t, Component& c) {
+        if (t == KeyPressType::DOWN) {
+            this->direction = {1, 0};
+        } else {
+            if (this->direction.dx == 1) {
+                this->direction = {0, 0};
+            }
+        }
+    };
+    std::function<void(KeyPressType, Component&)> left_callback = [this](KeyPressType t, Component& c) {
+        if (t == KeyPressType::DOWN) {
+            this->direction = {-1, 0};
+        } else {
+            if (this->direction.dx == -1) {
+                this->direction = {0, 0};
+            }
+        }
+    };
+
     Player(std::shared_ptr<Session> session, int x, int y, int w, int h, bool has_collision) : MultipartComponent(session, x, y, w, h, has_collision) {
         addTexture(MultipartRectangleTexture::createInstance(session, 50, 50, {255, 0, 0, 255}));
-        session->register_key_event(KeyEventCallback(std::string("Right"), [](KeyPressType t, Component& c) {
-            Player& p = dynamic_cast<Player&>(c);
-            p.on_key_event(t, std::string("Right"));
-        }, *this));
-        session->register_key_event(KeyEventCallback(std::string("Left"), [](KeyPressType t, Component& c) {
-            Player& p = dynamic_cast<Player&>(c);
-            p.on_key_event(t, std::string("Left"));
-        }, *this));
+        session->register_key_event(KeyEventCallback(std::string("Right"), right_callback, *this));
+        session->register_key_event(KeyEventCallback(std::string("Left"), left_callback, *this));
     };
 };
 
