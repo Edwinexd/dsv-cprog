@@ -57,7 +57,7 @@ void Session::add_queued()
 
 void Session::register_key_event(KeyEventCallback callback)
 {
-    if (this->key_events.count(callback.getKeyCode() == 0))
+    if (this->key_events.count(callback.getKeyCode()) == 0)
     {
         this->key_events.insert(std::make_pair(callback.getKeyCode(), std::vector<KeyEventCallback>()));
     }
