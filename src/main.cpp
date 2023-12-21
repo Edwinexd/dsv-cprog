@@ -81,7 +81,7 @@ int main(int argc, char** argv) {
 	std::cout << (enemy.get() == nullptr) << std::endl;
 	
 	auto spaceinvader = Spaceinvader::createInstance(g_session, 200, 200, 45, 45, 100, "images/alive.png", "images/dead.png", 29);
-	
+	spaceinvader->kill();
 	// Create invaders component
 	auto invaders = InvadersComponent::createInstance(g_session, 100, 100, 3, 10, 45, 45, 10);
 

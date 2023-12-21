@@ -20,6 +20,21 @@ struct WindowInformation
     {}
 };
 
+struct CollisionEvent
+{
+    std::shared_ptr<Component> src;
+    std::shared_ptr<Component> other;
+	bool operator==(const CollisionEvent& other) const
+	{
+		return (src == other.src && this->other == other.other) || (src == other.other && this->other == other.src);
+	}
+private:
+    CollisionEvent(std::shared_ptr<Component> src, std::shared_ptr<Component> other) : src(src), other(other)
+    {
+    }
+	friend class Session;
+};
+
 class Session
 {
 private:
@@ -31,10 +46,12 @@ private:
 	std::vector<std::shared_ptr<Component>> components;
 	std::vector<std::shared_ptr<Component>> add_queue;
 	std::vector<std::shared_ptr<Component>> remove_queue;
+	std::vector<CollisionEvent> collision_events_queue;
 	std::unordered_map<int32_t , std::vector<KeyEventCallback>> key_events;
 
     void remove_queued();
 	void add_queued();
+	void handle_collision_events();
 public:
 
 	Session() : window_data(0,0,0,0)
@@ -42,6 +59,7 @@ public:
 		components = std::vector<std::shared_ptr<Component>>();
 		add_queue = std::vector<std::shared_ptr<Component>>();
 		remove_queue = std::vector<std::shared_ptr<Component>>();
+		collision_events_queue = std::vector<CollisionEvent>();
 		key_events = std::unordered_map<int32_t , std::vector<KeyEventCallback>>();
 		win = sys.win;
 		ren = sys.ren;

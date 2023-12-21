@@ -21,6 +21,7 @@ std::shared_ptr<Component> Session::add_component(std::unique_ptr<Component> com
     this->add_queue.push_back(shared);
     return shared;
 }
+
 void Session::remove_component(std::shared_ptr<Component> comp)
 {
 
@@ -54,6 +55,16 @@ void Session::add_queued()
         this->components.push_back(std::move(comp));
     }
     this->add_queue.clear();
+}
+
+void Session::handle_collision_events()
+{
+    for (auto& event : this->collision_events_queue)
+    {
+        event.src->on_collision(event.other);
+        event.other->on_collision(event.src);
+    }
+    this->collision_events_queue.clear();
 }
 
 void Session::register_key_event(KeyEventCallback callback)
@@ -129,7 +140,10 @@ void Session::check_collision(std::shared_ptr<Component> src)
         auto comp_rect = other_component->get_rect();
         if (SDL_HasIntersection(&src_rect, &comp_rect))
         {
-            src->on_collision(other_component);
+            if (std::find(this->collision_events_queue.begin(), this->collision_events_queue.end(), CollisionEvent(src, other_component)) == this->collision_events_queue.end())
+            {
+                this->collision_events_queue.push_back(CollisionEvent(src, other_component));
+            }
         }
     }
 }
@@ -208,7 +222,7 @@ void Session::run()
                 this->check_collision(component); // Pass the raw pointer of the component
             }
         }
-
+        this->handle_collision_events();
         SDL_SetRenderDrawColor(this->ren, 255, 255, 255, 255);
         SDL_RenderClear(this->ren);
         this->remove_queued();
