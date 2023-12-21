@@ -56,6 +56,8 @@ public:
         // the laser is clear of the invaders rect
         // we assume that all entities below us are moving +-2 pixels per tick in x-direction
         int ticks_to_clear = (get_rect().y + get_rect().h - laser_y) / laser_dy;
+        // TODO: This needs to be changed so we can draw as a small of a romb hitbox as possible
+        // will need to make spaceinvader movement deterministic
         int ticks_to_clear_x = ticks_to_clear * 2;
         int ticks_to_clear_y = ticks_to_clear * laser_dy;
         int left_x_bound = laser_x - ticks_to_clear_x;
