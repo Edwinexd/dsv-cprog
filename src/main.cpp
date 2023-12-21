@@ -83,7 +83,14 @@ int main(int argc, char** argv) {
 	auto spaceinvader = Spaceinvader::createInstance(g_session, 200, 200, 45, 45, 100, "images/alive.png", "images/dead.png", 29);
 	spaceinvader->kill();
 	// Create invaders component
-	auto invaders = InvadersComponent::createInstance(g_session, 100, 100, 3, 10, 45, 45, 10);
+	// calculate number of invaders we can fit on the x-axis
+	// invaders move +-200 pixels on the x-axis so we have 850 - 200 = 650 pixels to work with
+	int invader_size = 45;
+	int invader_spacing = 10;
+	int num_of_columns = 650 / (invader_size + invader_spacing);
+
+
+	auto invaders = InvadersComponent::createInstance(g_session, 100, 150, 4, num_of_columns, invader_size, invader_size, invader_spacing);
 
 	// Create player
 	auto player = Player::createInstance(g_session, 700, 750, 75, 75, true, 100, "images/player_alive.png", "images/player_dead.png");

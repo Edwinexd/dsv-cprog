@@ -12,7 +12,7 @@ public:
     void shoot();
     void tick() override;
     void mouseDown(int x, int y) {
-        shoot();
+        // shoot();
     }
 protected:
     Spaceinvader(std::shared_ptr<Session> session, int x, int y, int w, int h, int hp, std::string alive_path, std::string dead_path, unsigned int random_seed) : Enemy(session, x, y, w, h, true, hp, alive_path, dead_path), random_seed(random_seed) {}
