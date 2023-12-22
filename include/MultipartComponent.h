@@ -20,6 +20,9 @@ public:
     void removeTexture(std::shared_ptr<MultipartTexture> tex);
     void setTexture(size_t index);
     void nextTexture();
+    std::size_t getActiveTexture() const {
+        return current_texture;
+    }
     ~MultipartComponent();
 protected:
     MultipartComponent(std::shared_ptr<Session> session, int x, int y, int w, int h, bool has_collision) : Component(session, x, y, w, h, has_collision) {

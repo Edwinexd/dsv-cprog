@@ -17,7 +17,7 @@ void Enemy::handle_death_tick() {
     }
     ticks_till_removal--;
     if (ticks_till_removal % 18 == 0) {
-        nextTexture();
+        setTexture((getActiveTexture() + 1) % 2);
     }
     if (ticks_till_removal <= 0) {
         rect.y = -10000;

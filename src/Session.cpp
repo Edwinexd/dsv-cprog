@@ -25,13 +25,15 @@ std::shared_ptr<Component> Session::add_component(std::unique_ptr<Component> com
 
 void Session::remove_component(std::shared_ptr<Component> comp)
 {
-
     this->remove_queue.push_back(comp);
 }
 
 void Session::remove_queued()
 {
-    for (auto comp : this->remove_queue)
+    // copy of remove queue to allow components to remove other components in their destructor
+    auto remove_queue_frozen = this->remove_queue;
+    remove_queue.clear();
+    for (auto comp : remove_queue_frozen)
     {
         for (auto i = components.begin(); i != components.end();)
         {
@@ -46,16 +48,17 @@ void Session::remove_queued()
             }
         }
     }
-    this->remove_queue.clear();
 }
 
 void Session::add_queued()
 {
-    for (auto& comp : this->add_queue)
+    // copy of add queue to allow components to add other components in their constructor
+    auto add_queue_frozen = this->add_queue;
+    add_queue.clear();
+    for (auto& comp : add_queue_frozen)
     {
         this->components.push_back(std::move(comp));
     }
-    this->add_queue.clear();
 }
 
 void Session::handle_collision_events()

@@ -21,7 +21,7 @@ public:
 	// std::shared_ptr<Component> getShared() { return shared_from_this(); }
 	virtual ~Component() = default;
 protected:
-	Component(std::shared_ptr<Session>session, int x, int y, int w, int h, bool has_collision) : rect{ x,y,w,h }, session(std::shared_ptr(session)), collision(has_collision) {}
+	Component(std::shared_ptr<Session>session, int x, int y, int w, int h, bool has_collision) : rect{ x,y,w,h }, session(session), collision(has_collision) {}
 	SDL_Rect rect;
     std::shared_ptr<Session> session;
 private:

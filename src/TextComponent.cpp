@@ -33,19 +33,16 @@ void TextComponent::draw_text(std::string text) {
     tex = SDL_CreateTextureFromSurface(sys.ren, surf);
     SDL_FreeSurface(surf);
     
-    rect.w = calculate_width(text);
+    int w = calculate_width(text);
+    rect.w = w;
     rect.h = max_height;
-    if (rect.w > max_width) {
-        rect.w = max_width;
-        rect.h = surf->h * max_width / surf->w;
-    }
 }
 
 // Returns the optimal width for the text based on the height of the component
 int TextComponent::calculate_width(std::string text) {
     int w, h;
     TTF_SizeUTF8(font, text.c_str(), &w, &h);
-    return w * get_rect().h / h;
+    return w * max_height / h;
 }
 
 TextComponent::~TextComponent() {

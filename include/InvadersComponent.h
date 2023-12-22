@@ -20,7 +20,7 @@ public:
             {
                 int x = col * (invaderWidth + invaderSpacing);
                 int y = row * (invaderHeight + invaderSpacing);
-                auto invader = Spaceinvader::createInstance(session, x, y, invaderWidth, invaderHeight, 100, "images/alive.png", "images/dead.png", 29);
+                auto invader = Spaceinvader::createInstance(session, x, y, invaderWidth, invaderHeight, 100, "images/alive.png", "images/dead.png", 1);
                 auto invader_ref = session->add_component(std::move(invader));
                 invaders[col][row] = std::dynamic_pointer_cast<Spaceinvader>(invader_ref);
                 total_invaders++;

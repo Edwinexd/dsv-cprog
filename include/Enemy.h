@@ -24,6 +24,9 @@ public:
             kill();
         }
     }
+    int get_hp() {
+        return hp;
+    }
 protected:
     Enemy(std::shared_ptr<Session> session, int x, int y, int w, int h, bool has_collision, int hp, std::string alive_path, std::string dead_path);
 private:

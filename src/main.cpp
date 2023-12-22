@@ -19,6 +19,7 @@
 #include <InvadersComponent.h>
 #include <Player.h>
 #include <Fonts.h>
+#include <BlockadeComponent.h>
 
 /*
 *   'gResPath' is a global constant defined in "Constants.h", 
@@ -87,6 +88,16 @@ int main(int argc, char** argv) {
 	auto score_text = TextComponent::createInstance(g_session, 250, 250, 300, 50, "Loading...", {255, 255, 255, 255}, Font::REGULAR);
 	auto s_text = g_session->add_component(std::move(score_text));
 	auto invaders = InvadersComponent::createInstance(g_session, 100, 100, 3, 10, 45, 45, 10, std::dynamic_pointer_cast<TextComponent>(s_text));
+
+	// Create some blockade components
+	auto blockade = BlockadeComponent::createInstance(g_session, 100, 600, 100, 100, 10, "images/castle_full_health.png", "images/castle_low_health.png");
+	g_session->add_component(std::move(blockade));
+	auto blockade2 = BlockadeComponent::createInstance(g_session, 300, 600, 100, 100, 10, "images/castle_full_health.png", "images/castle_low_health.png");
+	g_session->add_component(std::move(blockade2));
+	auto blockade3 = BlockadeComponent::createInstance(g_session, 500, 600, 100, 100, 10, "images/castle_full_health.png", "images/castle_low_health.png");
+	g_session->add_component(std::move(blockade3));
+	auto blockade4 = BlockadeComponent::createInstance(g_session, 700, 600, 100, 100, 10, "images/castle_full_health.png", "images/castle_low_health.png");
+	g_session->add_component(std::move(blockade4));
 
 	// Create player
 	auto player = Player::createInstance(g_session, 700, 750, 75, 75, true, 100, "images/player_alive.png", "images/player_dead.png");
