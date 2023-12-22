@@ -9,6 +9,7 @@ std::shared_ptr<Component> Session::add_component(std::unique_ptr<Component> com
     {
         throw std::runtime_error("Component is nullptr");
     }
+    // check that unique_ptr ownership is transferred 
     for (auto& component : this->components)
     {
         if (component.get() == comp.get())

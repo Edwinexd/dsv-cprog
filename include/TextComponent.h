@@ -6,12 +6,16 @@
 #include <SDL2/SDL_ttf.h>
 #include <string>
 #include <memory>
+#include <Color.h>
+#include <Fonts.h>
 
 class TextComponent : public Component
 {
 public:
-    static std::unique_ptr<TextComponent> createInstance(std::shared_ptr<Session> session, int x, int y, int w, int h, std::string text) {
-        return std::unique_ptr<TextComponent>(new TextComponent(session, x, y, w, h, text));
+    // Create a new instance of TextComponent and return it as a unique_ptr, add to session via session.add_component(std::move(text_component))
+    // Note: Color alpha is ignored
+    static std::unique_ptr<TextComponent> createInstance(std::shared_ptr<Session> session, int x, int y, int max_width, int max_height, std::string text, Color color, Font f) {
+        return std::unique_ptr<TextComponent>(new TextComponent(session, x, y, max_width, max_height, text, color, f));
     }
     void render() const override;
     void tick() {};
@@ -19,11 +23,16 @@ public:
     std::string getText() const { return text; }
     void setText(std::string text);
 protected:
-    TextComponent(std::shared_ptr<Session> session, int x, int y, int w, int h, std::string text);
+    TextComponent(std::shared_ptr<Session> session, int x, int y, int max_width, int max_height, std::string text, Color color, Font f);
 private:
+    int max_width;
+    int max_height;
     std::string text;
     SDL_Texture *tex;
     TTF_Font* font;
+    Color color;
+    int calculate_width(std::string text);
+    void draw_text(std::string text);
 
 };
 

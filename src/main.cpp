@@ -18,6 +18,7 @@
 #include <Spaceinvader.h>
 #include <InvadersComponent.h>
 #include <Player.h>
+#include <Fonts.h>
 
 /*
 *   'gResPath' is a global constant defined in "Constants.h", 
@@ -59,7 +60,7 @@ protected:
 int main(int argc, char** argv) {
 	std::shared_ptr<Session> g_session = std::make_shared<Session>();
 	// g_session->play_sound("sounds/bgMusic.wav", -1);
-	auto text = TextComponent::createInstance(g_session, 250, 250, 200, 200, "Hello World!");
+	auto text = TextComponent::createInstance(g_session, 250, 250, 200, 200, "Hello World!", {255, 255, 255, 255}, Font::REGULAR);
 	g_session->add_component(std::move(text));
 	auto image = ImageComponent::createInstance(g_session, 0, 0, 100, 100, "images/png_sample.png", false);
 	g_session->add_component(std::move(image));
@@ -83,7 +84,9 @@ int main(int argc, char** argv) {
 	auto spaceinvader = Spaceinvader::createInstance(g_session, 200, 200, 45, 45, 100, "images/alive.png", "images/dead.png", 29);
 	spaceinvader->kill();
 	// Create invaders component
-	auto invaders = InvadersComponent::createInstance(g_session, 100, 100, 3, 10, 45, 45, 10);
+	auto score_text = TextComponent::createInstance(g_session, 250, 250, 300, 50, "Loading...", {255, 255, 255, 255}, Font::REGULAR);
+	auto s_text = g_session->add_component(std::move(score_text));
+	auto invaders = InvadersComponent::createInstance(g_session, 100, 100, 3, 10, 45, 45, 10, std::dynamic_pointer_cast<TextComponent>(s_text));
 
 	// Create player
 	auto player = Player::createInstance(g_session, 700, 750, 75, 75, true, 100, "images/player_alive.png", "images/player_dead.png");
