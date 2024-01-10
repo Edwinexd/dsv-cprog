@@ -64,12 +64,12 @@ int main(int argc, char** argv) {
 	g_session->play_sound("sounds/legends.wav", -1);
 	// g_session->play_sound("sounds/bgMusic.wav", -1);
 	auto text = TextComponent::create_instance(g_session, 250, 250, 200, 200, "Hello World!", {255, 255, 255, 255}, Font::REGULAR);
-	g_session->add_component(std::move(text));
+	g_session->add_component(text);
 	auto image = ImageComponent::create_instance(g_session, 0, 0, 100, 100, "images/png_sample.png", false);
-	g_session->add_component(std::move(image));
+	g_session->add_component(image);
 	auto bg_image = ImageComponent::create_instance(g_session, 0, 0, 850, 850, "images/dalle_generated_bg.jpg", false);
-	g_session->add_component(std::move(bg_image));
-	std::unique_ptr<MultipartComponent> multipart = MultipartComponent::create_instance(g_session, 250, 250, 250, 250, true, {0,0});
+	g_session->add_component(bg_image);
+	std::shared_ptr<MultipartComponent> multipart = MultipartComponent::create_instance(g_session, 250, 250, 250, 250, true, {0,0});
 	auto multipartImageTexture1 = MultipartImageTexture::create_instance(g_session, "images/alive.png");
 	auto multipartImageTexture2 = MultipartImageTexture::create_instance(g_session, "images/dead.png");
 	auto multipartRectangle = MultipartRectangleTexture::create_instance(g_session, 250, 250, Color(255, 0, 0, 255));
@@ -80,7 +80,7 @@ int main(int argc, char** argv) {
 
 	auto enemy = Enemy::create_instance(g_session, 100, 100, 45, 45, true, {0,0}, 100, "images/alive.png", "images/dead.png");
 	enemy->damage(100);
-	g_session->add_component(std::move(enemy));
+	g_session->add_component(enemy);
 	// kill enemy
 	std::cout << (enemy.get() == nullptr) << std::endl;
 	
@@ -88,28 +88,27 @@ int main(int argc, char** argv) {
 	spaceinvader->kill();
 	// Create invaders component
 	auto score_text = TextComponent::create_instance(g_session, 250, 250, 300, 50, "Loading...", {255, 255, 255, 255}, Font::REGULAR);
-	auto s_text = g_session->add_component(std::move(score_text));
-	auto invaders = InvadersComponent::create_instance(g_session, 100, 100, 3, 10, 45, 45, 10, std::dynamic_pointer_cast<TextComponent>(s_text));
+	auto invaders = InvadersComponent::create_instance(g_session, 100, 100, 3, 10, 45, 45, 10, score_text);
 
 	// Create some blockade components
 	auto blockade = BlockadeComponent::create_instance(g_session, 100, 600, 100, 100, 10, "images/castle_full_health.png", "images/castle_low_health.png");
-	g_session->add_component(std::move(blockade));
+	g_session->add_component(blockade);
 	auto blockade2 = BlockadeComponent::create_instance(g_session, 300, 600, 100, 100, 10, "images/castle_full_health.png", "images/castle_low_health.png");
-	g_session->add_component(std::move(blockade2));
+	g_session->add_component(blockade2);
 	auto blockade3 = BlockadeComponent::create_instance(g_session, 500, 600, 100, 100, 10, "images/castle_full_health.png", "images/castle_low_health.png");
-	g_session->add_component(std::move(blockade3));
+	g_session->add_component(blockade3);
 	auto blockade4 = BlockadeComponent::create_instance(g_session, 700, 600, 100, 100, 10, "images/castle_full_health.png", "images/castle_low_health.png");
-	g_session->add_component(std::move(blockade4));
+	g_session->add_component(blockade4);
 
 	// Create player
 	auto player = Player::create_instance(g_session, 700, 750, 75, 75, true, 3, "images/player_alive.png", "images/player_dead.png");
-	g_session->add_component(std::move(player));
+	g_session->add_component(player);
 
-	g_session->add_component(std::move(invaders));
+	g_session->add_component(invaders);
 
-	g_session->add_component(std::move(spaceinvader));
+	g_session->add_component(spaceinvader);
 	
-	// g_session->add_component(std::move(multipart));
+	// g_session->add_component(multipart);
 
 	g_session->run();
 	

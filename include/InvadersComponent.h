@@ -7,8 +7,8 @@
 class InvadersComponent : public Component
 {
 public:
-    static std::unique_ptr<InvadersComponent> create_instance(std::shared_ptr<Session> session, int x, int y, int num_rows, int num_cols, int invader_width, int invader_height, int invader_spacing, std::shared_ptr<TextComponent> score_text) {
-        return std::unique_ptr<InvadersComponent>(new InvadersComponent(session, x, y, num_rows, num_cols, invader_width, invader_height, invader_spacing, score_text));
+    static std::shared_ptr<InvadersComponent> create_instance(std::shared_ptr<Session> session, int x, int y, int num_rows, int num_cols, int invader_width, int invader_height, int invader_spacing, std::shared_ptr<TextComponent> score_text) {
+        return std::shared_ptr<InvadersComponent>(new InvadersComponent(session, x, y, num_rows, num_cols, invader_width, invader_height, invader_spacing, score_text));
     }
 
     void on_remove(std::shared_ptr<Component> other) {
@@ -37,8 +37,8 @@ public:
                 int x = col * (invader_width + invader_spacing);
                 int y = row * (invader_height + invader_spacing);
                 auto invader = Spaceinvader::create_instance(session, x, y, invader_width, invader_height, 1, "images/alive.png", "images/dead.png", 1);
-                auto invader_ref = session->add_component(std::move(invader));
-                invaders[col][row] = std::dynamic_pointer_cast<Spaceinvader>(invader_ref);
+                session->add_component(invader);
+                invaders[col][row] = invader;
                 total_invaders++;
                 alive_invaders++;
             }

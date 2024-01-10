@@ -5,8 +5,8 @@
 class Enemy : public MultipartComponent
 {
 public:
-    static std::unique_ptr<Enemy> create_instance(std::shared_ptr<Session> session, int x, int y, int w, int h, bool has_collision, Direction d, int hp, std::string alive_image_path, std::string dead_image_path) {
-        return std::unique_ptr<Enemy>(new Enemy(session, x, y, w, h, has_collision, d, hp, alive_image_path, dead_image_path));
+    static std::shared_ptr<Enemy> create_instance(std::shared_ptr<Session> session, int x, int y, int w, int h, bool has_collision, Direction d, int hp, std::string alive_image_path, std::string dead_image_path) {
+        return std::shared_ptr<Enemy>(new Enemy(session, x, y, w, h, has_collision, d, hp, alive_image_path, dead_image_path));
     }
     void tick() override;
     virtual void kill() {

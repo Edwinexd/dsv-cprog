@@ -10,8 +10,8 @@
 class MultipartComponent : public Component
 {
 public:
-    static std::unique_ptr<MultipartComponent> create_instance(std::shared_ptr<Session> session, int x, int y, int w, int h, bool has_collision, Direction d) {
-        return std::unique_ptr<MultipartComponent>(new MultipartComponent(session, x, y, w, h, has_collision, d));
+    static std::shared_ptr<MultipartComponent> create_instance(std::shared_ptr<Session> session, int x, int y, int w, int h, bool has_collision, Direction d) {
+        return std::shared_ptr<MultipartComponent>(new MultipartComponent(session, x, y, w, h, has_collision, d));
     }
     void render() const override;
     void tick() {

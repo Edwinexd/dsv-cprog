@@ -3,7 +3,7 @@
 #include "Session.h"
 #include <iostream>
 
-std::shared_ptr<Component> Session::add_component(std::unique_ptr<Component> comp)
+void Session::add_component(std::shared_ptr<Component> comp)
 {
     if (comp.get() == nullptr)
     {
@@ -14,13 +14,10 @@ std::shared_ptr<Component> Session::add_component(std::unique_ptr<Component> com
     {
         if (component.get() == comp.get())
         {
-            return component;
+            return;
         }
     }
-    auto ptr = comp.release();
-    auto shared = std::shared_ptr<Component>(ptr);
-    this->add_queue.push_back(shared);
-    return shared;
+    this->add_queue.push_back(comp);
 }
 
 void Session::remove_component(std::shared_ptr<Component> comp)
@@ -64,7 +61,7 @@ void Session::add_queued()
     add_queue.clear();
     for (auto& comp : add_queue_frozen)
     {
-        this->components.push_back(std::move(comp));
+        this->components.push_back(comp);
     }
 }
 

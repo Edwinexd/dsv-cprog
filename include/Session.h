@@ -69,7 +69,7 @@ public:
 
 
 
-	std::shared_ptr<Component> add_component(std::unique_ptr<Component> comp);
+	void add_component(std::shared_ptr<Component> comp);
 	void remove_component(std::shared_ptr<Component> comp);
 	void register_key_event(KeyEventCallback callback);
 	void unregister_key_event(Component* src); // remove every callback from that component

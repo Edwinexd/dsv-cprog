@@ -2,8 +2,8 @@
 #include <stdlib.h>
 
 void Spaceinvader::shoot() {
-    std::unique_ptr<Laser> b = Laser::create_instance(session, get_x() + (get_width()/2), get_y() + get_height(), 5, 40, true, {0, 2}, 1);
-    session->add_component(std::move(b));
+    std::shared_ptr<Laser> b = Laser::create_instance(session, get_x() + (get_width()/2), get_y() + get_height(), 5, 40, true, {0, 2}, 1);
+    session->add_component(b);
 }
 
 void Spaceinvader::tick() {
