@@ -11,6 +11,20 @@ public:
         return std::unique_ptr<InvadersComponent>(new InvadersComponent(session, x, y, num_rows, num_cols, invader_width, invader_height, invader_spacing, score_text));
     }
 
+    void on_remove(std::shared_ptr<Component> other) {
+        if (auto invader = std::dynamic_pointer_cast<Spaceinvader>(other)) {
+            for (int col = 0; col < num_cols; col++) {
+                for (int row = 0; row < num_rows; row++) {
+                    if (invaders[col][row] == invader) {
+                        invaders[col][row] = nullptr;
+                        alive_invaders--;
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
     void create_invaders()
     {
         invaders.resize(num_cols, std::vector<std::shared_ptr<Spaceinvader>>(num_rows));
@@ -21,7 +35,7 @@ public:
             {
                 int x = col * (invader_width + invader_spacing);
                 int y = row * (invader_height + invader_spacing);
-                auto invader = Spaceinvader::create_instance(session, x, y, invader_width, invader_height, 100, "images/alive.png", "images/dead.png", 1);
+                auto invader = Spaceinvader::create_instance(session, x, y, invader_width, invader_height, 1, "images/alive.png", "images/dead.png", 1);
                 auto invader_ref = session->add_component(std::move(invader));
                 invaders[col][row] = std::dynamic_pointer_cast<Spaceinvader>(invader_ref);
                 total_invaders++;
@@ -39,7 +53,6 @@ public:
                 auto invader = invaders[col][row];
                 if (invader->is_dead())
                 {
-                    invaders[col][row] = nullptr;
                     continue;
                 }
                 invader->shoot();
@@ -97,23 +110,10 @@ public:
     void tick() override
     {
         tick_count++;
-        for (int col = 0; col < num_cols; col++)
+        if (alive_invaders == 0)
         {
-            if (!invaders[col].empty())
-            {
-                for (int row = num_rows - 1; row >= 0; row--)
-                {
-                    if (invaders[col][row] != nullptr)
-                    {
-                        auto invader = invaders[col][row];
-                        if (invader->is_dead())
-                        {
-                            alive_invaders--;
-                            invaders[col][row] = nullptr;
-                        }
-                    }
-                }
-            }
+            score_text->set_text("You win!");
+            return;
         }
         if (tick_count % 100 == 0)
         {

@@ -15,7 +15,7 @@ public:
         shoot();
     }
 protected:
-    Spaceinvader(std::shared_ptr<Session> session, int x, int y, int w, int h, int hp, std::string alive_path, std::string dead_path, unsigned int random_seed) : Enemy(session, x, y, w, h, true, hp, alive_path, dead_path), random_seed(random_seed) {}
+    Spaceinvader(std::shared_ptr<Session> session, int x, int y, int w, int h, int hp, std::string alive_path, std::string dead_path, unsigned int random_seed) : Enemy(session, x, y, w, h, true, {0,0}, hp, alive_path, dead_path), random_seed(random_seed) {}
 private:
     unsigned int random_seed;
     unsigned int ticks_loop = 0;

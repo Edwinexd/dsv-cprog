@@ -10,11 +10,13 @@
 class MultipartComponent : public Component
 {
 public:
-    static std::unique_ptr<MultipartComponent> create_instance(std::shared_ptr<Session> session, int x, int y, int w, int h, bool has_collision) {
-        return std::unique_ptr<MultipartComponent>(new MultipartComponent(session, x, y, w, h, has_collision));
+    static std::unique_ptr<MultipartComponent> create_instance(std::shared_ptr<Session> session, int x, int y, int w, int h, bool has_collision, Direction d) {
+        return std::unique_ptr<MultipartComponent>(new MultipartComponent(session, x, y, w, h, has_collision, d));
     }
     void render() const override;
-    void tick() {};
+    void tick() {
+        Component::tick();
+    };
     void add_texture(std::shared_ptr<MultipartTexture> tex);
     void remove_texture(int index);
     void remove_texture(std::shared_ptr<MultipartTexture> tex);
@@ -25,7 +27,7 @@ public:
     }
     ~MultipartComponent();
 protected:
-    MultipartComponent(std::shared_ptr<Session> session, int x, int y, int w, int h, bool has_collision) : Component(session, x, y, w, h, has_collision) {
+    MultipartComponent(std::shared_ptr<Session> session, int x, int y, int w, int h, bool has_collision, Direction d) : Component(session, x, y, w, h, has_collision, d) {
         current_texture = 0;
         textures = std::vector<std::shared_ptr<MultipartTexture>>();
     }

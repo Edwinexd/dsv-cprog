@@ -39,6 +39,13 @@ void Session::remove_queued()
         {
             if (i->get() == comp.get())
             {
+                for (auto& other : components)
+                {
+                    if (other.get() != comp.get())
+                    {
+                        other->on_remove(comp);
+                    }
+                }
                 this->unregister_key_event(comp.get());
                 i = components.erase(i);
             }
@@ -217,7 +224,7 @@ void Session::run()
         for (auto& component : this->components)
         {
             component->tick();
-            if (component->get_rect().x < 0 - 50 || component->get_rect().x > this->window_data.w + 50 || component->get_rect().y < 0 - 50 || component->get_rect().y > this->window_data.h + 50)
+            if (component->get_x() < 0 - 50 || component->get_x() > this->window_data.w + 50 || component->get_y() < 0 - 50 || component->get_y() > this->window_data.h + 50)
             {
                 this->remove_component(component);
             }

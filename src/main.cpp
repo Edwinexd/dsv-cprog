@@ -67,7 +67,7 @@ int main(int argc, char** argv) {
 	g_session->add_component(std::move(image));
 	auto bg_image = ImageComponent::create_instance(g_session, 0, 0, 850, 850, "images/dalle_generated_bg.jpg", false);
 	g_session->add_component(std::move(bg_image));
-	std::unique_ptr<MultipartComponent> multipart = MultipartComponent::create_instance(g_session, 250, 250, 250, 250, true);
+	std::unique_ptr<MultipartComponent> multipart = MultipartComponent::create_instance(g_session, 250, 250, 250, 250, true, {0,0});
 	auto multipartImageTexture1 = MultipartImageTexture::create_instance(g_session, "images/alive.png");
 	auto multipartImageTexture2 = MultipartImageTexture::create_instance(g_session, "images/dead.png");
 	auto multipartRectangle = MultipartRectangleTexture::create_instance(g_session, 250, 250, Color(255, 0, 0, 255));
@@ -76,7 +76,7 @@ int main(int argc, char** argv) {
 	multipart->add_texture(multipartRectangle);
 	multipart->set_texture(2);
 
-	auto enemy = Enemy::create_instance(g_session, 100, 100, 45, 45, true, 100, "images/alive.png", "images/dead.png");
+	auto enemy = Enemy::create_instance(g_session, 100, 100, 45, 45, true, {0,0}, 100, "images/alive.png", "images/dead.png");
 	enemy->damage(100);
 	g_session->add_component(std::move(enemy));
 	// kill enemy
@@ -100,7 +100,7 @@ int main(int argc, char** argv) {
 	g_session->add_component(std::move(blockade4));
 
 	// Create player
-	auto player = Player::create_instance(g_session, 700, 750, 75, 75, true, 100, "images/player_alive.png", "images/player_dead.png");
+	auto player = Player::create_instance(g_session, 700, 750, 75, 75, true, 3, "images/player_alive.png", "images/player_dead.png");
 	g_session->add_component(std::move(player));
 
 	g_session->add_component(std::move(invaders));

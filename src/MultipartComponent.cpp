@@ -36,7 +36,7 @@ void MultipartComponent::next_texture() {
 }
 
 void MultipartComponent::set_texture(std::size_t index) {
-    if (index >= textures.size()) {
+    if (index < 0 || index >= textures.size()) {
         throw std::runtime_error("Index out of bounds in MultipartComponent::set_texture");
     }
     current_texture = index;

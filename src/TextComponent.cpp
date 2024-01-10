@@ -34,8 +34,8 @@ void TextComponent::draw_text(std::string text) {
     SDL_FreeSurface(surf);
     
     int w = calculate_width(text);
-    rect.w = w;
-    rect.h = max_height;
+    set_width(w);
+    set_height(max_height);
 }
 
 // Returns the optimal width for the text based on the height of the component
