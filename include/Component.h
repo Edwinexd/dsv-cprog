@@ -8,9 +8,8 @@
 class Component : public std::enable_shared_from_this<Component>
 {
 public:
-	// TODO: the following should be allowed to be set as lambdas via Component.onCollision = [](Component* other) { ... };
 	virtual void on_collision(std::shared_ptr<Component> other) {}
-	// Event **must** be handled immediatly, as the component will not be guaranteed to exist after the function returns
+	// Event **must** be handled immediatly, as the component isn't guaranteed to exist after the function returns
 	virtual void on_remove(std::shared_ptr<Component> other) {}
 	virtual void mouse_down(int x, int y) {}
 	virtual void mouse_up(int x, int y) {}
@@ -37,6 +36,12 @@ public:
 	void set_width(int w) { rect.w = w; }
 	void set_height(int h) { rect.h = h; }
 	virtual ~Component() = default;
+
+	// Forbid value semantics
+	Component(const Component&) = delete;
+	Component& operator=(const Component&) = delete;
+	Component(Component&&) = delete;
+	Component& operator=(Component&&) = delete;
 protected:
 	Component(std::shared_ptr<Session>session, int x, int y, int w, int h, bool has_collision, Direction d = {0,0}) : session(session), collision(has_collision), rect{ x,y,w,h }, direction(d) {}
     std::shared_ptr<Session> session;
