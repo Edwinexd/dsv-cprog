@@ -5,10 +5,12 @@
 #include "Session.h"
 #include "Direction.h"
 
+// Spelmotorklass - grundläggande komponent som ska kunna renderas och röra sig
+// Valt att lägga direction/rörelse direkt i Component istf e.x. MovementComponent för att undvika
+// onödigt många subklasser till MultiPartComponent
 class Component : public std::enable_shared_from_this<Component>
 {
 public:
-	// TODO: the following should be allowed to be set as lambdas via Component.onCollision = [](Component* other) { ... };
 	virtual void on_collision(std::shared_ptr<Component> other) {}
 	// Event **must** be handled immediatly, as the component will not be guaranteed to exist after the function returns
 	virtual void on_remove(std::shared_ptr<Component> other) {}
@@ -25,7 +27,6 @@ public:
 	}
 	bool has_collision() const { return collision; }
 	void set_has_collision(bool c) { this->collision = c; }
-	// std::shared_ptr<Component> getShared() { return shared_from_this(); }
 	Direction get_direction() const { return direction; }
 	void set_direction(Direction d) { direction = d; }
 	void move(int dx, int dy) { rect.x += dx; rect.y += dy; }

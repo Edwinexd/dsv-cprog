@@ -5,6 +5,7 @@
 #include "MultipartRectangleTexture.h"
 #include "Enemy.h"
 
+// Spelklass - Player härleds från Enemy
 class Player : public Enemy
 {
 public:

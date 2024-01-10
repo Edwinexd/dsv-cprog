@@ -1,26 +1,16 @@
 #ifndef DIRECTION_H
 #define DIRECTION_H
 
+// Spelmotorklass - en riktning/rörelse/"velocity"
 struct Direction
 {
-    Direction(int dx, int dy, bool keep_on_screen = false) : dx(dx), dy(dy), keep_on_screen(keep_on_screen) {}
+    Direction(int dx, int dy, bool keep_on_screen = false);
     int dx, dy;
     bool keep_on_screen;
-    const Direction& operator+=(const Direction& other) {
-        dx += other.dx;
-        dy += other.dy;
-        return *this;
-    }
-    const Direction& operator-=(const Direction& other) {
-        dx -= other.dx;
-        dy -= other.dy;
-        return *this;
-    }
-    const Direction operator+(const Direction& other) const {
-        Direction temp(*this);
-        temp += other;
-        return temp;
-    }
+    const Direction& operator+=(const Direction& other);
+    const Direction& operator-=(const Direction& other);
+    const Direction operator+(const Direction& other) const;
+    const Direction operator-(const Direction& other) const;
 };
 
 #endif

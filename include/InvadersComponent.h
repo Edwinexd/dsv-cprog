@@ -3,6 +3,7 @@
 #include <Spaceinvader.h>
 #include <TextComponent.h>
 
+// Spelklass - Huvudsakliga spellogiken, härleds från Component
 // TODO: This file should have a corresponding .cpp file
 class InvadersComponent : public Component
 {

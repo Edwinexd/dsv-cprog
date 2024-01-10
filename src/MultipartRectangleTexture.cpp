@@ -13,3 +13,7 @@ MultipartRectangleTexture::MultipartRectangleTexture(std::shared_ptr<Session> se
     SDL_SetRenderTarget(sys.ren, NULL);
     return tex;
 }()) {}
+
+std::shared_ptr<MultipartRectangleTexture> MultipartRectangleTexture::create_instance(std::shared_ptr<Session> session, int w, int h, Color color) {
+    return std::shared_ptr<MultipartRectangleTexture>(new MultipartRectangleTexture(session, w, h, color));
+}

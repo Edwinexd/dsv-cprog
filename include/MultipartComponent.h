@@ -7,12 +7,11 @@
 #include <memory>
 #include <vector>
 
+// Spelmotorklass - Komponent som kan ha flera olika texturer och byta mellan dem
 class MultipartComponent : public Component
 {
 public:
-    static std::shared_ptr<MultipartComponent> create_instance(std::shared_ptr<Session> session, int x, int y, int w, int h, bool has_collision, Direction d) {
-        return std::shared_ptr<MultipartComponent>(new MultipartComponent(session, x, y, w, h, has_collision, d));
-    }
+    static std::shared_ptr<MultipartComponent> create_instance(std::shared_ptr<Session> session, int x, int y, int w, int h, bool has_collision, Direction d);
     void render() const override;
     void tick() {
         Component::tick();
@@ -27,10 +26,7 @@ public:
     }
     ~MultipartComponent();
 protected:
-    MultipartComponent(std::shared_ptr<Session> session, int x, int y, int w, int h, bool has_collision, Direction d) : Component(session, x, y, w, h, has_collision, d) {
-        current_texture = 0;
-        textures = std::vector<std::shared_ptr<MultipartTexture>>();
-    }
+    MultipartComponent(std::shared_ptr<Session> session, int x, int y, int w, int h, bool has_collision, Direction d);
 private:
     std::vector<std::shared_ptr<MultipartTexture>> textures;
     std::size_t current_texture;

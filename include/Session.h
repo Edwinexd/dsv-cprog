@@ -35,6 +35,7 @@ private:
 	friend class Session;
 };
 
+// Spelmotorklass - Huvudklassen som håller koll, tickar och renderar komponenter
 class Session
 {
 private:
@@ -52,29 +53,15 @@ private:
     void remove_queued();
 	void add_queued();
 	void handle_collision_events();
+	Session();
 public:
-
-	Session() : window_data(0,0,0,0)
-	{
-		components = std::vector<std::shared_ptr<Component>>();
-		add_queue = std::vector<std::shared_ptr<Component>>();
-		remove_queue = std::vector<std::shared_ptr<Component>>();
-		collision_events_queue = std::vector<CollisionEvent>();
-		key_events = std::unordered_map<int32_t , std::vector<KeyEventCallback>>();
-		win = sys.win;
-		ren = sys.ren;
-        SDL_GetWindowSize(win, &window_data.w, &window_data.h);
-        SDL_GetWindowPosition(win, &window_data.x, &window_data.y);
-	}
-
-
-
+	static std::shared_ptr<Session> create_instance();
 	void add_component(std::shared_ptr<Component> comp);
 	void remove_component(std::shared_ptr<Component> comp);
 	void register_key_event(KeyEventCallback callback);
 	void unregister_key_event(Component* src); // remove every callback from that component
 	void unregister_key_event(Component* src, int32_t key_code);
-    WindowInformation get_window_data()
+    WindowInformation get_window_data() const
     {
         return window_data;
     }
@@ -85,17 +72,4 @@ public:
 #include "Component.h"
 #include "KeyEventCallback.h"
 
-/*
-class Session
-{
-public:
-	void add(std::shared_ptr<Component> comp);
-	void remove(std::shared_ptr<Component> comp);
-	void run();
-	void play_sound(std::string path, int loops);
-private:
-	std::vector<std::shared_ptr<Component>> comps;
-	std::vector<std::shared_ptr<Component>> added, removed;
-};
-*/
 #endif
