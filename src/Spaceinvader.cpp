@@ -6,6 +6,7 @@ void Spaceinvader::shoot() {
     session->add_component(b);
 }
 
+/*
 void Spaceinvader::tick() {
     Enemy::tick();
     ticks_loop++;
@@ -27,5 +28,6 @@ void Spaceinvader::tick() {
         rect.x += directions[active_direction].dx;
         rect.y += directions[active_direction].dy;
     }
+    */
     */
 }

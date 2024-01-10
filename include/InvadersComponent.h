@@ -1,7 +1,9 @@
 #ifndef INVADERS_H
 #define INVADERS_H
+#include "Direction.h"
 #include <Spaceinvader.h>
 #include <TextComponent.h>
+#include <array>
 
 // TODO: This file should have a corresponding .cpp file
 class InvadersComponent : public Component
@@ -118,9 +120,41 @@ public:
         }
         if (tick_count % 100 == 0)
         {
+            if(tick_count % 200 == 0)
+            {
+                // reverse direction, if active_direction is even we add 1, if it is odd we subtract 1
+                is_left = !is_left ?  true : false;
+                
+            }
+            else {
+                srand(random_seed + tick_count);
+                is_left = rand() % 2;
+            
+            }
             shoot_random_invader();
+
         }
         score_text->set_text("Score: " + std::to_string(total_invaders - alive_invaders));
+    }
+
+    void update_direction()
+    {
+        for (int col = 0; col < num_cols; col++)
+        {
+            if (!invaders[col].empty())
+            {
+                for (int row = num_rows - 1; row >= 0; row--)
+                {
+                    if (invaders[col][row] != nullptr)
+                    {
+                        // Guaranteed to not be nullptr by tick
+                        auto invader = invaders[col][row];
+                        invader->set_direction(unit_vec[is_left]);
+                        
+                    }
+                }
+            }
+        }
     }
 
     void render() const override
@@ -140,14 +174,17 @@ protected:
         create_invaders();
     }
 private:
-    int tick_count = 0;
-    int num_rows;
-    int num_cols;
+    unsigned int random_seed;
+    unsigned int tick_count = 0;
+    bool is_left = true;
+    unsigned int num_rows;
+    unsigned int num_cols;
     int invader_width;
     int invader_height;
     int invader_spacing;
     int total_invaders = 0;
     int alive_invaders = 0;
+    Direction unit_vec[2] = {{1,0},{0,1}};
     std::vector<std::vector<std::shared_ptr<Spaceinvader>>> invaders;
     std::shared_ptr<TextComponent> score_text;
 };
