@@ -9,7 +9,7 @@ public:
         return std::unique_ptr<Enemy>(new Enemy(session, x, y, w, h, has_collision, d, hp, alive_image_path, dead_image_path));
     }
     void tick() override;
-    void kill() {
+    virtual void kill() {
         hp = 0;
         dead = true;
         set_has_collision(false);
@@ -17,7 +17,7 @@ public:
     bool is_dead() {
         return dead;
     }
-    void damage(int amount) {
+    virtual void damage(int amount) {
         hp -= amount;
         if (hp <= 0) {
             kill();

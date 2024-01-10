@@ -60,6 +60,8 @@ protected:
 
 int main(int argc, char** argv) {
 	std::shared_ptr<Session> g_session = std::make_shared<Session>();
+
+	g_session->play_sound("sounds/legends.wav", -1);
 	// g_session->play_sound("sounds/bgMusic.wav", -1);
 	auto text = TextComponent::create_instance(g_session, 250, 250, 200, 200, "Hello World!", {255, 255, 255, 255}, Font::REGULAR);
 	g_session->add_component(std::move(text));

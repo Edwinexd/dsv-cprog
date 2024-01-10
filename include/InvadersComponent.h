@@ -18,6 +18,7 @@ public:
                     if (invaders[col][row] == invader) {
                         invaders[col][row] = nullptr;
                         alive_invaders--;
+                        session->play_sound("sounds/score.wav", 0);
                         return;
                     }
                 }

@@ -21,6 +21,7 @@ void Laser::on_collision(std::shared_ptr<Component> other) {
     move_to(-10000, -10000);
     if (auto enemy = std::dynamic_pointer_cast<Enemy>(other)) {
         enemy->damage(damage);
+        session->play_sound("sounds/hit.wav", 0);
     }
 }
 
