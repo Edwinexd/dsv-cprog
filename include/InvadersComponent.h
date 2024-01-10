@@ -1,6 +1,8 @@
 #ifndef INVADERS_H
 #define INVADERS_H
 #include "Direction.h"
+#include "Enemy.h"
+#include "Session.h"
 #include <Spaceinvader.h>
 #include <TextComponent.h>
 #include <array>
@@ -49,6 +51,7 @@ public:
 
     bool shoot_bottom_of_column(int col)
     {
+        
         for (int row = num_rows - 1; row >= 0; row--)
         {
             if (invaders[col][row].get() != nullptr)
@@ -112,29 +115,58 @@ public:
 
     void tick() override
     {
+
+        
+        const WindowInformation&  window = session.get_window_data()
         tick_count++;
         if (alive_invaders == 0)
         {
             score_text->set_text("You win!");
             return;
         }
+
+        bool wall_collide = check_wall_collision();
+
         if (tick_count % 100 == 0)
         {
-            if(tick_count % 200 == 0)
+            if (!wall_collide)
             {
-                // reverse direction, if active_direction is even we add 1, if it is odd we subtract 1
-                is_left = !is_left ?  true : false;
+                if(tick_count % 200 == 0)
+                {
+                    // reverse direction, if active_direction is even we add 1, if it is odd we subtract 1
+                    is_left = !is_left ?  true : false;
                 
-            }
-            else {
-                srand(random_seed + tick_count);
-                is_left = rand() % 2;
+                }
+                else {
+                    srand(random_seed + tick_count);
+                    is_left = rand() % 2;
             
+                }
             }
             shoot_random_invader();
 
         }
         score_text->set_text("Score: " + std::to_string(total_invaders - alive_invaders));
+    }
+
+
+    bool check_wall_collision()
+    {
+        if(is_left)
+        {
+            for(int i = 0; i < num_cols; i++)
+            {
+                
+            }
+        }
+        else {
+            for(int i = num_cols - 1; i >= 0 ; i--)
+            {
+
+            }
+        }
+        return false;
+
     }
 
     void update_direction()

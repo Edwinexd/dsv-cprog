@@ -35,7 +35,7 @@ private:
 	friend class Session;
 };
 
-class Session
+class Sessionactive_direction
 {
 private:
     SDL_Window* win;
@@ -74,7 +74,7 @@ public:
 	void register_key_event(KeyEventCallback callback);
 	void unregister_key_event(Component* src); // remove every callback from that component
 	void unregister_key_event(Component* src, int32_t key_code);
-    WindowInformation get_window_data()
+    const WindowInformation& get_window_data()
     {
         return window_data;
     }
