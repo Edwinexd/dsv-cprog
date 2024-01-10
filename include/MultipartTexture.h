@@ -10,7 +10,7 @@
 class MultipartTexture
 {
 public:
-    SDL_Texture *getTexture() const { return texture; }
+    SDL_Texture *get_texture() const { return texture; }
     virtual ~MultipartTexture() { SDL_DestroyTexture(texture); }
 protected:
     MultipartTexture(std::shared_ptr<Session> session, SDL_Texture *tex) : session(session), texture(tex) {}

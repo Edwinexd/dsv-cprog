@@ -3,39 +3,46 @@
 #include "Session.h"
 #include <iostream>
 
-std::shared_ptr<Component> Session::add_component(std::unique_ptr<Component> comp)
+void Session::add_component(std::shared_ptr<Component> comp)
 {
     if (comp.get() == nullptr)
     {
         throw std::runtime_error("Component is nullptr");
     }
+    // check that unique_ptr ownership is transferred 
     for (auto& component : this->components)
     {
         if (component.get() == comp.get())
         {
-            return component;
+            return;
         }
     }
-    auto ptr = comp.release();
-    auto shared = std::shared_ptr<Component>(ptr);
-    this->add_queue.push_back(shared);
-    return shared;
+    this->add_queue.push_back(comp);
 }
 
 void Session::remove_component(std::shared_ptr<Component> comp)
 {
-
     this->remove_queue.push_back(comp);
 }
 
 void Session::remove_queued()
 {
-    for (auto comp : this->remove_queue)
+    // copy of remove queue to allow components to remove other components in their destructor
+    auto remove_queue_frozen = this->remove_queue;
+    remove_queue.clear();
+    for (auto comp : remove_queue_frozen)
     {
         for (auto i = components.begin(); i != components.end();)
         {
             if (i->get() == comp.get())
             {
+                for (auto& other : components)
+                {
+                    if (other.get() != comp.get())
+                    {
+                        other->on_remove(comp);
+                    }
+                }
                 this->unregister_key_event(comp.get());
                 i = components.erase(i);
             }
@@ -45,16 +52,17 @@ void Session::remove_queued()
             }
         }
     }
-    this->remove_queue.clear();
 }
 
 void Session::add_queued()
 {
-    for (auto& comp : this->add_queue)
+    // copy of add queue to allow components to add other components in their constructor
+    auto add_queue_frozen = this->add_queue;
+    add_queue.clear();
+    for (auto& comp : add_queue_frozen)
     {
-        this->components.push_back(std::move(comp));
+        this->components.push_back(comp);
     }
-    this->add_queue.clear();
 }
 
 void Session::handle_collision_events()
@@ -69,7 +77,7 @@ void Session::handle_collision_events()
 
 void Session::register_key_event(KeyEventCallback callback)
 {
-    for(auto key : callback.getKeyCode())
+    for(auto key : callback.get_key_code())
     {
         if (this->key_events.count(key) == 0)
         {
@@ -202,18 +210,18 @@ void Session::run()
                 break;
             case SDL_MOUSEBUTTONDOWN:
                 for (auto& c : this->components)
-                    c->mouseDown(event.button.x, event.button.y);
+                    c->mouse_down(event.button.x, event.button.y);
                 break;
             case SDL_MOUSEBUTTONUP:
                 for (auto& c : this->components)
-                    c->mouseUp(event.button.x, event.button.y);
+                    c->mouse_up(event.button.x, event.button.y);
                 break;
             }
         }
         for (auto& component : this->components)
         {
             component->tick();
-            if (component->get_rect().x < 0 - 50 || component->get_rect().x > this->window_data.w + 50 || component->get_rect().y < 0 - 50 || component->get_rect().y > this->window_data.h + 50)
+            if (component->get_x() < 0 - 50 || component->get_x() > this->window_data.w + 50 || component->get_y() < 0 - 50 || component->get_y() > this->window_data.h + 50)
             {
                 this->remove_component(component);
             }
@@ -263,11 +271,11 @@ void Session::run() {
             case SDL_QUIT: quit = true; break;
             case SDL_MOUSEBUTTONDOWN:
                 for (std::shared_ptr<Component> c : comps)
-                    c->mouseDown(event.button.x, event.button.y);
+                    c->mouse_down(event.button.x, event.button.y);
                 break;
             case SDL_MOUSEBUTTONUP:
                 for (std::shared_ptr<Component> c : comps)
-                    c->mouseUp(event.button.x, event.button.y);
+                    c->mouse_up(event.button.x, event.button.y);
                 break;
             }
         }

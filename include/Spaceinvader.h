@@ -6,8 +6,8 @@
 class Spaceinvader : public Enemy
 {
 public:
-    static std::unique_ptr<Spaceinvader> createInstance(std::shared_ptr<Session> session, int x, int y, int w, int h, int hp, std::string alive_image_path, std::string dead_image_path, unsigned int random_seed) {
-        return std::unique_ptr<Spaceinvader>(new Spaceinvader(session, x, y, w, h, hp, alive_image_path, dead_image_path, random_seed));
+    static std::shared_ptr<Spaceinvader> create_instance(std::shared_ptr<Session> session, int x, int y, int w, int h, int hp, std::string alive_image_path, std::string dead_image_path, unsigned int random_seed) {
+        return std::shared_ptr<Spaceinvader>(new Spaceinvader(session, x, y, w, h, hp, alive_image_path, dead_image_path, random_seed));
     }
     void shoot();
     void tick() override;
@@ -15,7 +15,7 @@ public:
         // shoot();
     }
 protected:
-    Spaceinvader(std::shared_ptr<Session> session, int x, int y, int w, int h, int hp, std::string alive_path, std::string dead_path, unsigned int random_seed) : Enemy(session, x, y, w, h, true, hp, alive_path, dead_path), random_seed(random_seed) {}
+    Spaceinvader(std::shared_ptr<Session> session, int x, int y, int w, int h, int hp, std::string alive_path, std::string dead_path, unsigned int random_seed) : Enemy(session, x, y, w, h, true, {0,0}, hp, alive_path, dead_path), random_seed(random_seed) {}
 private:
     unsigned int random_seed;
     unsigned int ticks_loop = 0;
