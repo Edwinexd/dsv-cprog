@@ -10,17 +10,17 @@
 class MultipartComponent : public Component
 {
 public:
-    static std::unique_ptr<MultipartComponent> createInstance(std::shared_ptr<Session> session, int x, int y, int w, int h, bool has_collision) {
+    static std::unique_ptr<MultipartComponent> create_instance(std::shared_ptr<Session> session, int x, int y, int w, int h, bool has_collision) {
         return std::unique_ptr<MultipartComponent>(new MultipartComponent(session, x, y, w, h, has_collision));
     }
     void render() const override;
     void tick() {};
-    void addTexture(std::shared_ptr<MultipartTexture> tex);
-    void removeTexture(int index);
-    void removeTexture(std::shared_ptr<MultipartTexture> tex);
-    void setTexture(size_t index);
-    void nextTexture();
-    std::size_t getActiveTexture() const {
+    void add_texture(std::shared_ptr<MultipartTexture> tex);
+    void remove_texture(int index);
+    void remove_texture(std::shared_ptr<MultipartTexture> tex);
+    void set_texture(size_t index);
+    void next_texture();
+    std::size_t get_active_texture() const {
         return current_texture;
     }
     ~MultipartComponent();

@@ -18,7 +18,7 @@ void TextComponent::render() const {
     SDL_RenderCopy(sys.ren, tex, NULL, &rect);
 }
 
-void TextComponent::setText(std::string text) {
+void TextComponent::set_text(std::string text) {
     SDL_DestroyTexture(tex);
     draw_text(text);
 }

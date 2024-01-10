@@ -38,7 +38,7 @@ public:
     }
 
 
-    std::vector<int32_t> getKeyCode() const
+    std::vector<int32_t> get_key_code() const
     {
         std::vector<int32_t> ret;
         for(auto key : assigned_key)

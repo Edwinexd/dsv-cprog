@@ -11,33 +11,33 @@ void MultipartComponent::render() const {
         throw std::runtime_error("No textures in MultipartComponent");
     }
     const SDL_Rect& rect = get_rect();
-    SDL_RenderCopy(sys.ren, textures[current_texture]->getTexture(), NULL, &rect);
+    SDL_RenderCopy(sys.ren, textures[current_texture]->get_texture(), NULL, &rect);
 }
 
-void MultipartComponent::addTexture(std::shared_ptr<MultipartTexture> tex) {
+void MultipartComponent::add_texture(std::shared_ptr<MultipartTexture> tex) {
     textures.push_back(tex);
 }
 
-void MultipartComponent::removeTexture(int index) {
+void MultipartComponent::remove_texture(int index) {
     textures.erase(textures.begin() + index);
 }
 
-void MultipartComponent::removeTexture(std::shared_ptr<MultipartTexture> tex) {
+void MultipartComponent::remove_texture(std::shared_ptr<MultipartTexture> tex) {
     for (std::size_t i = 0; i < textures.size(); i++) {
         if (textures[i] == tex) {
-            removeTexture(i);
+            remove_texture(i);
             break;
         }
     }
 }
 
-void MultipartComponent::nextTexture() {
-    setTexture(++current_texture % textures.size());
+void MultipartComponent::next_texture() {
+    set_texture(++current_texture % textures.size());
 }
 
-void MultipartComponent::setTexture(std::size_t index) {
+void MultipartComponent::set_texture(std::size_t index) {
     if (index >= textures.size()) {
-        throw std::runtime_error("Index out of bounds in MultipartComponent::setTexture");
+        throw std::runtime_error("Index out of bounds in MultipartComponent::set_texture");
     }
     current_texture = index;
 }

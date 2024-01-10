@@ -18,7 +18,6 @@ struct System
 
 	SDL_Window* win;
 	SDL_Renderer* ren;
-	// vector for storing all the sounds
     std::unordered_map<std::string, std::unique_ptr<Mix_Chunk>> sound_bank;
 };
 

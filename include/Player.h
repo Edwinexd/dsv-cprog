@@ -8,7 +8,7 @@
 class Player : public Enemy
 {
 public:
-    static std::unique_ptr<Player> createInstance(std::shared_ptr<Session> session, int x, int y, int w, int h, bool has_collision, int hp, std::string alive_image_path, std::string dead_image_path) {
+    static std::unique_ptr<Player> create_instance(std::shared_ptr<Session> session, int x, int y, int w, int h, bool has_collision, int hp, std::string alive_image_path, std::string dead_image_path) {
         return std::unique_ptr<Player>(new Player(session, x, y, w, h, has_collision, hp, alive_image_path, dead_image_path));
     }
     void tick() override;

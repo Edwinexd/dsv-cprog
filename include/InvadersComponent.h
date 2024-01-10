@@ -3,24 +3,25 @@
 #include <Spaceinvader.h>
 #include <TextComponent.h>
 
+// TODO: This file should have a corresponding .cpp file
 class InvadersComponent : public Component
 {
 public:
-    static std::unique_ptr<InvadersComponent> createInstance(std::shared_ptr<Session> session, int x, int y, int numRows, int numCols, int invaderWidth, int invaderHeight, int invaderSpacing, std::shared_ptr<TextComponent> score_text) {
-        return std::unique_ptr<InvadersComponent>(new InvadersComponent(session, x, y, numRows, numCols, invaderWidth, invaderHeight, invaderSpacing, score_text));
+    static std::unique_ptr<InvadersComponent> create_instance(std::shared_ptr<Session> session, int x, int y, int num_rows, int num_cols, int invader_width, int invader_height, int invader_spacing, std::shared_ptr<TextComponent> score_text) {
+        return std::unique_ptr<InvadersComponent>(new InvadersComponent(session, x, y, num_rows, num_cols, invader_width, invader_height, invader_spacing, score_text));
     }
 
-    void createInvaders()
+    void create_invaders()
     {
-        invaders.resize(numCols, std::vector<std::shared_ptr<Spaceinvader>>(numRows));
+        invaders.resize(num_cols, std::vector<std::shared_ptr<Spaceinvader>>(num_rows));
 
-        for (int row = 0; row < numRows; row++)
+        for (int row = 0; row < num_rows; row++)
         {
-            for (int col = 0; col < numCols; col++)
+            for (int col = 0; col < num_cols; col++)
             {
-                int x = col * (invaderWidth + invaderSpacing);
-                int y = row * (invaderHeight + invaderSpacing);
-                auto invader = Spaceinvader::createInstance(session, x, y, invaderWidth, invaderHeight, 100, "images/alive.png", "images/dead.png", 1);
+                int x = col * (invader_width + invader_spacing);
+                int y = row * (invader_height + invader_spacing);
+                auto invader = Spaceinvader::create_instance(session, x, y, invader_width, invader_height, 100, "images/alive.png", "images/dead.png", 1);
                 auto invader_ref = session->add_component(std::move(invader));
                 invaders[col][row] = std::dynamic_pointer_cast<Spaceinvader>(invader_ref);
                 total_invaders++;
@@ -29,9 +30,9 @@ public:
         }
     }
 
-    bool shootBottomOfColumn(int col)
+    bool shoot_bottom_of_column(int col)
     {
-        for (int row = numRows - 1; row >= 0; row--)
+        for (int row = num_rows - 1; row >= 0; row--)
         {
             if (invaders[col][row].get() != nullptr)
             {
@@ -48,10 +49,10 @@ public:
         return false;
     }
 
-    void shootRandomInvader()
+    void shoot_random_invader()
     {
         std::vector<int> columns;
-        for (int col = 0; col < numCols; col++)
+        for (int col = 0; col < num_cols; col++)
         {
             if (!invaders[col].empty())
             {
@@ -66,20 +67,20 @@ public:
         std::random_shuffle(columns.begin(), columns.end());
         for (auto col : columns)
         {
-            if (shootBottomOfColumn(col))
+            if (shoot_bottom_of_column(col))
             {
                 return;
             }
         }
     }
 
-    void shootBottomInvaders()
+    void shoot_bottom_invaders()
     {
-        for (int col = 0; col < numCols; col++)
+        for (int col = 0; col < num_cols; col++)
         {
             if (!invaders[col].empty())
             {
-                for (int row = numRows - 1; row >= 0; row--)
+                for (int row = num_rows - 1; row >= 0; row--)
                 {
                     if (invaders[col][row] != nullptr)
                     {
@@ -96,11 +97,11 @@ public:
     void tick() override
     {
         tick_count++;
-        for (int col = 0; col < numCols; col++)
+        for (int col = 0; col < num_cols; col++)
         {
             if (!invaders[col].empty())
             {
-                for (int row = numRows - 1; row >= 0; row--)
+                for (int row = num_rows - 1; row >= 0; row--)
                 {
                     if (invaders[col][row] != nullptr)
                     {
@@ -116,34 +117,34 @@ public:
         }
         if (tick_count % 100 == 0)
         {
-            shootRandomInvader();
+            shoot_random_invader();
         }
-        score_text->setText("Score: " + std::to_string(total_invaders - alive_invaders));
+        score_text->set_text("Score: " + std::to_string(total_invaders - alive_invaders));
     }
 
     void render() const override
     {
     }
 protected:
-    InvadersComponent(std::shared_ptr<Session> session, int x, int y, int numRows, int numCols, int invaderWidth, int invaderHeight, int invaderSpacing, std::shared_ptr<TextComponent> score_text)
+    InvadersComponent(std::shared_ptr<Session> session, int x, int y, int num_rows, int num_cols, int invader_width, int invader_height, int invader_spacing, std::shared_ptr<TextComponent> score_text)
         : Component(
               session, x, y, [&]()
-              { return numCols * (invaderWidth + invaderSpacing) - invaderSpacing; }(),
+              { return num_cols * (invader_width + invader_spacing) - invader_spacing; }(),
               [&]()
-              { return numRows * (invaderHeight + invaderSpacing) - invaderSpacing; }(),
+              { return num_rows * (invader_height + invader_spacing) - invader_spacing; }(),
               false),
-          numRows(numRows), numCols(numCols),
-          invaderWidth(invaderWidth), invaderHeight(invaderHeight), invaderSpacing(invaderSpacing), score_text(score_text)
+          num_rows(num_rows), num_cols(num_cols),
+          invader_width(invader_width), invader_height(invader_height), invader_spacing(invader_spacing), score_text(score_text)
     {
-        createInvaders();
+        create_invaders();
     }
 private:
     int tick_count = 0;
-    int numRows;
-    int numCols;
-    int invaderWidth;
-    int invaderHeight;
-    int invaderSpacing;
+    int num_rows;
+    int num_cols;
+    int invader_width;
+    int invader_height;
+    int invader_spacing;
     int total_invaders = 0;
     int alive_invaders = 0;
     std::vector<std::vector<std::shared_ptr<Spaceinvader>>> invaders;

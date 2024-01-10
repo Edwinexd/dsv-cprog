@@ -20,7 +20,7 @@ void Player::shoot() {
     if (ticks_since_last_shot < 120 || is_dead()) {
         return;
     }
-    std::unique_ptr<Laser> b = Laser::createInstance(session, get_rect().x + (get_rect().w/2), get_rect().y - get_rect().h, 5, 40, true, {0, -1}, 1);
+    std::unique_ptr<Laser> b = Laser::create_instance(session, get_rect().x + (get_rect().w/2), get_rect().y - get_rect().h, 5, 40, true, {0, -1}, 1);
     session->add_component(std::move(b));
     ticks_since_last_shot = 0;
 }

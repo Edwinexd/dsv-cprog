@@ -6,7 +6,7 @@
 class Laser : public MultipartComponent
 {
 public:
-    static std::unique_ptr<Laser> createInstance(std::shared_ptr<Session> session, int x, int y, int w, int h, bool has_collision, Direction direction, int damage) {
+    static std::unique_ptr<Laser> create_instance(std::shared_ptr<Session> session, int x, int y, int w, int h, bool has_collision, Direction direction, int damage) {
         return std::unique_ptr<Laser>(new Laser(session, x, y, w, h, has_collision, direction, damage));
     }
     void tick() override;
