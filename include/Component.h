@@ -5,6 +5,9 @@
 #include "Session.h"
 #include "Direction.h"
 
+// Spelmotorklass - grundläggande komponent som ska kunna renderas och röra sig
+// Valt att lägga direction/rörelse direkt i Component istf e.x. MovementComponent för att undvika
+// onödigt många subklasser till MultiPartComponent
 class Component : public std::enable_shared_from_this<Component>
 {
 public:
@@ -24,7 +27,6 @@ public:
 	}
 	bool has_collision() const { return collision; }
 	void set_has_collision(bool c) { this->collision = c; }
-	// std::shared_ptr<Component> getShared() { return shared_from_this(); }
 	Direction get_direction() const { return direction; }
 	void set_direction(Direction d) { direction = d; }
 	void move(int dx, int dy) { rect.x += dx; rect.y += dy; }

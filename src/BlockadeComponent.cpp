@@ -12,6 +12,10 @@ BlockadeComponent::BlockadeComponent(std::shared_ptr<Session> session, int x, in
     add_texture(low_health);
 }
 
+std::shared_ptr<BlockadeComponent> BlockadeComponent::create_instance(std::shared_ptr<Session> session, int x, int y, int w, int h, int hp, std::string alive_image_path, std::string dead_image_path) {
+    return std::shared_ptr<BlockadeComponent>(new BlockadeComponent(session, x, y, w, h, hp, alive_image_path, dead_image_path));
+}
+
 void BlockadeComponent::tick() {
     Enemy::tick();
     std::size_t hp = get_hp();

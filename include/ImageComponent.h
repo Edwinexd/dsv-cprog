@@ -7,12 +7,11 @@
 #include <string>
 #include <memory>
 
+// Spelmotorklass - Enkel statisk bild, härleds från Component
 class ImageComponent : public Component
 {
 public:
-    static std::shared_ptr<ImageComponent> create_instance(std::shared_ptr<Session> session, int x, int y, int w, int h, std::string path, bool has_collision) {
-        return std::shared_ptr<ImageComponent>(new ImageComponent(session, x, y, w, h, path, has_collision));
-    }
+    static std::shared_ptr<ImageComponent> create_instance(std::shared_ptr<Session> session, int x, int y, int w, int h, std::string path, bool has_collision);
     void render() const override;
     void tick() {};
     ~ImageComponent();

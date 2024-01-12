@@ -9,14 +9,13 @@
 #include <Color.h>
 #include <Fonts.h>
 
+// Spelmotorklass - Enkel text, härleds från Component
 class TextComponent : public Component
 {
 public:
     // Create a new instance of TextComponent and return it as a unique_ptr, add to session via session.add_component(text_component)
     // Note: Color alpha is ignored
-    static std::shared_ptr<TextComponent> create_instance(std::shared_ptr<Session> session, int x, int y, int max_width, int max_height, std::string text, Color color, Font f) {
-        return std::shared_ptr<TextComponent>(new TextComponent(session, x, y, max_width, max_height, text, color, f));
-    }
+    static std::shared_ptr<TextComponent> create_instance(std::shared_ptr<Session> session, int x, int y, int max_width, int max_height, std::string text, Color color, Font f);
     void render() const override;
     void tick() {};
     ~TextComponent();

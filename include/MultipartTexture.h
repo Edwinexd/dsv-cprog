@@ -7,6 +7,7 @@
 #include <vector>
 #include <iostream>
 
+// Spelmotorklass - Abstraktion för en SDL_Texture som kan användas i MultipartComponent
 class MultipartTexture
 {
 public:
