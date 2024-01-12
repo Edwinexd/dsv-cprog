@@ -127,17 +127,12 @@ public:
         {
             if (!wall_collide)
             {
+                /*
                 if(tick_count % 200 == 0)
                 {
                     // reverse direction, if active_direction is even we add 1, if it is odd we subtract 1
                     is_left = !is_left ?  true : false;
-                
-                }
-                else {
-                    srand(random_seed + tick_count);
-                    is_left = rand() % 2;
-            
-                }
+                }*/
             }
             shoot_random_invader();
 
@@ -157,10 +152,10 @@ public:
                     auto current_invader = invaders[col][row];
                     if(current_invader != nullptr)
                     {
-                        if(current_invader->is_dead())
+                        if(!current_invader->is_dead())
                         {
                             
-                            if(current_invader->get_x() <= this->session->get_window_data().x + MARGIN)
+                            if(current_invader->get_x() <= invader_spacing*2)
                             {
                                 is_left = false;
                                 update_direction();
@@ -175,18 +170,18 @@ public:
             }
         }
         else {
-            for(unsigned col = num_cols - 1; col >= 0 ; col--)
+            for(unsigned col = num_cols - 1; col > 0 ; --col)
             {
                 for(unsigned row = 0; row < num_rows; row++)
                 {
                     auto current_invader = invaders[col][row];
                     if(current_invader != nullptr)
                     {
-                        if(current_invader->is_dead())
+                        if(!current_invader->is_dead())
                         {
                             WindowInformation win = this->session->get_window_data();
                             
-                            if(current_invader->get_x() <= win.x + win.w - MARGIN)
+                            if(current_invader->get_x() + invader_width >= win.w - invader_spacing*2)
                             {
                                 is_left = true;
                                 update_direction();
@@ -210,7 +205,7 @@ public:
         {
             if (!invaders[col].empty())
             {
-                for (unsigned row = num_rows - 1; row >= 0; row--)
+                for (unsigned row = 0; row < num_rows; ++row)
                 {
                     if (invaders[col][row] != nullptr)
                     {
