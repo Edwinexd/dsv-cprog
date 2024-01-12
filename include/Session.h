@@ -12,6 +12,7 @@
 class KeyEventCallback;
 class Component;
 
+//This struct is only ever acquired behind a const reference.
 struct WindowInformation
 {
     int w, h, x, y;
@@ -35,7 +36,7 @@ private:
 	friend class Session;
 };
 
-class Sessionactive_direction
+class Session
 {
 private:
     SDL_Window* win;

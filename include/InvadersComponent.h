@@ -117,7 +117,7 @@ public:
     {
 
         
-        const WindowInformation&  window = session.get_window_data()
+        const WindowInformation&  window = session->get_window_data();
         tick_count++;
         if (alive_invaders == 0)
         {
@@ -154,14 +154,53 @@ public:
     {
         if(is_left)
         {
-            for(int i = 0; i < num_cols; i++)
+            for(int col = 0; col < num_cols; col++)
             {
+                for(int row = 0; row < num_rows; row++)
+                {
+                    auto current_invader = invaders[col][row];
+                    if(current_invader != nullptr)
+                    {
+                        if(current_invader->is_dead())
+                        {
+                            
+                            if(current_invader->get_x() <= this->session->get_window_data().x + MARGIN)
+                            {
+                                is_left = false;
+                                update_direction();
+                                return true;
+
+                            }
+
+                        }
+                    }
+                }
                 
             }
         }
         else {
-            for(int i = num_cols - 1; i >= 0 ; i--)
+            for(int col = num_cols - 1; col >= 0 ; col--)
             {
+                for(int row = 0; row < num_rows; row++)
+                {
+                    auto current_invader = invaders[col][row];
+                    if(current_invader != nullptr)
+                    {
+                        if(current_invader->is_dead())
+                        {
+                            WindowInformation win = this->session->get_window_data();
+                            
+                            if(current_invader->get_x() <= win.x + win.w - MARGIN)
+                            {
+                                is_left = true;
+                                update_direction();
+                                return true;
+
+                            }
+
+                        }
+                    }
+                }
 
             }
         }
@@ -216,7 +255,8 @@ private:
     int invader_spacing;
     int total_invaders = 0;
     int alive_invaders = 0;
-    Direction unit_vec[2] = {{1,0},{0,1}};
+    const static int MARGIN = 50;
+    Direction unit_vec[2] = {{1,0},{-1,0}};
     std::vector<std::vector<std::shared_ptr<Spaceinvader>>> invaders;
     std::shared_ptr<TextComponent> score_text;
 };
