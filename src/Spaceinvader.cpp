@@ -24,7 +24,6 @@ void Spaceinvader::tick() {
         }
     }
     set_direction(directions[active_direction]);
-    /*
     if (ticks_loop % 2 == 0) {
         rect.x += directions[active_direction].dx;
         rect.y += directions[active_direction].dy;

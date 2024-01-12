@@ -2,7 +2,6 @@
 #define INVADERS_H
 #include "Direction.h"
 #include "Enemy.h"
-#include "Session.h"
 #include <Spaceinvader.h>
 #include <TextComponent.h>
 #include <array>
@@ -17,8 +16,8 @@ public:
 
     void on_remove(std::shared_ptr<Component> other) {
         if (auto invader = std::dynamic_pointer_cast<Spaceinvader>(other)) {
-            for (int col = 0; col < num_cols; col++) {
-                for (int row = 0; row < num_rows; row++) {
+            for (unsigned col = 0; col < num_cols; col++) {
+                for (unsigned row = 0; row < num_rows; row++) {
                     if (invaders[col][row] == invader) {
                         invaders[col][row] = nullptr;
                         alive_invaders--;
@@ -34,13 +33,13 @@ public:
     {
         invaders.resize(num_cols, std::vector<std::shared_ptr<Spaceinvader>>(num_rows));
 
-        for (int row = 0; row < num_rows; row++)
+        for (unsigned row = 0; row < num_rows; row++)
         {
-            for (int col = 0; col < num_cols; col++)
+            for (unsigned col = 0; col < num_cols; col++)
             {
                 int x = col * (invader_width + invader_spacing);
                 int y = row * (invader_height + invader_spacing);
-                auto invader = Spaceinvader::create_instance(session, x, y, invader_width, invader_height, 1, "images/alive.png", "images/dead.png", 1);
+                auto invader = Spaceinvader::create_instance(session, x, y, invader_width, invader_height, 1, "images/alive.png", "images/dead.png");
                 session->add_component(invader);
                 invaders[col][row] = invader;
                 total_invaders++;
@@ -70,8 +69,8 @@ public:
 
     void shoot_random_invader()
     {
-        std::vector<int> columns;
-        for (int col = 0; col < num_cols; col++)
+        std::vector<unsigned> columns;
+        for (unsigned col = 0; col < num_cols; col++)
         {
             if (!invaders[col].empty())
             {
@@ -95,11 +94,11 @@ public:
 
     void shoot_bottom_invaders()
     {
-        for (int col = 0; col < num_cols; col++)
+        for (unsigned col = 0; col < num_cols; col++)
         {
             if (!invaders[col].empty())
             {
-                for (int row = num_rows - 1; row >= 0; row--)
+                for (unsigned row = num_rows - 1; row >= 0; row--)
                 {
                     if (invaders[col][row] != nullptr)
                     {
@@ -115,9 +114,6 @@ public:
 
     void tick() override
     {
-
-        
-        const WindowInformation&  window = session->get_window_data();
         tick_count++;
         if (alive_invaders == 0)
         {
@@ -154,9 +150,9 @@ public:
     {
         if(is_left)
         {
-            for(int col = 0; col < num_cols; col++)
+            for(unsigned col = 0; col < num_cols; col++)
             {
-                for(int row = 0; row < num_rows; row++)
+                for(unsigned row = 0; row < num_rows; row++)
                 {
                     auto current_invader = invaders[col][row];
                     if(current_invader != nullptr)
@@ -179,9 +175,9 @@ public:
             }
         }
         else {
-            for(int col = num_cols - 1; col >= 0 ; col--)
+            for(unsigned col = num_cols - 1; col >= 0 ; col--)
             {
-                for(int row = 0; row < num_rows; row++)
+                for(unsigned row = 0; row < num_rows; row++)
                 {
                     auto current_invader = invaders[col][row];
                     if(current_invader != nullptr)
@@ -210,17 +206,17 @@ public:
 
     void update_direction()
     {
-        for (int col = 0; col < num_cols; col++)
+        for (unsigned col = 0; col < num_cols; col++)
         {
             if (!invaders[col].empty())
             {
-                for (int row = num_rows - 1; row >= 0; row--)
+                for (unsigned row = num_rows - 1; row >= 0; row--)
                 {
                     if (invaders[col][row] != nullptr)
                     {
                         // Guaranteed to not be nullptr by tick
                         auto invader = invaders[col][row];
-                        invader->set_direction(unit_vec[is_left]);
+                        invader->set_direction(unit_vec[is_left ? 1 : 0]);
                         
                     }
                 }
