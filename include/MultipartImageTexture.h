@@ -7,12 +7,11 @@
 #include <string>
 #include <memory>
 
+// Spelmotorklass - En bild textur till en MultipartComponent
 class MultipartImageTexture : public MultipartTexture
 {
 public:
-    static std::shared_ptr<MultipartImageTexture> create_instance(std::shared_ptr<Session> session, std::string path) {
-        return std::shared_ptr<MultipartImageTexture>(new MultipartImageTexture(session, path));
-    }
+    static std::shared_ptr<MultipartImageTexture> create_instance(std::shared_ptr<Session> session, std::string path);
 protected:
     MultipartImageTexture(std::shared_ptr<Session> session, std::string path);
 };

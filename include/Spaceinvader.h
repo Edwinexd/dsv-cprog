@@ -3,6 +3,7 @@
 #include <Enemy.h>
 #include <Laser.h>
 
+// Spelklass - Spaceinvader härleds från Enemy
 class Spaceinvader : public Enemy
 {
 public:
