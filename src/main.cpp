@@ -59,7 +59,7 @@ protected:
 // };
 
 int main(int argc, char** argv) {
-	std::shared_ptr<Session> g_session = std::make_shared<Session>();
+	std::shared_ptr<Session> g_session = Session::create_instance();
 
 	g_session->play_sound("sounds/legends.wav", -1);
 	// g_session->play_sound("sounds/bgMusic.wav", -1);

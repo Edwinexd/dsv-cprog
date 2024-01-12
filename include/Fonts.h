@@ -3,6 +3,7 @@
 
 #include <string>
 
+// Spelmotorklass - abstraktion för Roboto-fonten
 enum Font {
     BLACK,
     BLACK_ITALIC,

@@ -13,6 +13,10 @@ TextComponent::TextComponent(std::shared_ptr<Session> session, int x, int y, int
     draw_text(text);
 }
 
+std::shared_ptr<TextComponent> TextComponent::create_instance(std::shared_ptr<Session> session, int x, int y, int max_width, int max_height, std::string text, Color color, Font f) {
+    return std::shared_ptr<TextComponent>(new TextComponent(session, x, y, max_width, max_height, text, color, f));
+}
+
 void TextComponent::render() const {
     const SDL_Rect &rect = get_rect();
     SDL_RenderCopy(sys.ren, tex, NULL, &rect);

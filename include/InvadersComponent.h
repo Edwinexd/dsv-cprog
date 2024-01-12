@@ -4,6 +4,7 @@
 #include <TextComponent.h>
 #include <Player.h>
 
+// Spelklass - Huvudsakliga spellogiken, härleds från Component
 // TODO: This file should have a corresponding .cpp file
 class InvadersComponent : public Component
 {

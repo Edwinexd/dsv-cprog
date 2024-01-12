@@ -3,14 +3,32 @@
 #include "Session.h"
 #include <iostream>
 
+Session::Session() : window_data(0, 0, 0, 0)
+{
+    components = std::vector<std::shared_ptr<Component>>();
+    add_queue = std::vector<std::shared_ptr<Component>>();
+    remove_queue = std::vector<std::shared_ptr<Component>>();
+    collision_events_queue = std::vector<CollisionEvent>();
+    key_events = std::unordered_map<int32_t, std::vector<KeyEventCallback>>();
+    win = sys.win;
+    ren = sys.ren;
+    SDL_GetWindowSize(win, &window_data.w, &window_data.h);
+    SDL_GetWindowPosition(win, &window_data.x, &window_data.y);
+}
+
+std::shared_ptr<Session> Session::create_instance()
+{
+    return std::shared_ptr<Session>(new Session());
+}
+
 void Session::add_component(std::shared_ptr<Component> comp)
 {
     if (comp.get() == nullptr)
     {
         throw std::runtime_error("Component is nullptr");
     }
-    // check that unique_ptr ownership is transferred 
-    for (auto& component : this->components)
+    // check that unique_ptr ownership is transferred
+    for (auto &component : this->components)
     {
         if (component.get() == comp.get())
         {
@@ -36,7 +54,7 @@ void Session::remove_queued()
         {
             if (i->get() == comp.get())
             {
-                for (auto& other : components)
+                for (auto &other : components)
                 {
                     if (other.get() != comp.get())
                     {
@@ -59,7 +77,7 @@ void Session::add_queued()
     // copy of add queue to allow components to add other components in their constructor
     auto add_queue_frozen = this->add_queue;
     add_queue.clear();
-    for (auto& comp : add_queue_frozen)
+    for (auto &comp : add_queue_frozen)
     {
         this->components.push_back(comp);
     }
@@ -67,7 +85,7 @@ void Session::add_queued()
 
 void Session::handle_collision_events()
 {
-    for (auto& event : this->collision_events_queue)
+    for (auto &event : this->collision_events_queue)
     {
         event.src->on_collision(event.other);
         event.other->on_collision(event.src);
@@ -77,7 +95,7 @@ void Session::handle_collision_events()
 
 void Session::register_key_event(KeyEventCallback callback)
 {
-    for(auto key : callback.get_key_code())
+    for (auto key : callback.get_key_code())
     {
         if (this->key_events.count(key) == 0)
         {
@@ -87,12 +105,12 @@ void Session::register_key_event(KeyEventCallback callback)
     }
 }
 
-void Session::unregister_key_event(Component* src)
+void Session::unregister_key_event(Component *src)
 {
     for (auto &key_event : this->key_events)
     {
         auto vector = key_event.second;
-        for (auto iter = vector.begin(); iter != vector.end(); )
+        for (auto iter = vector.begin(); iter != vector.end();)
         {
             if (&(iter->get_component()) == src)
             {
@@ -107,12 +125,12 @@ void Session::unregister_key_event(Component* src)
     }
 }
 
-void Session::unregister_key_event(Component* src, int32_t key_code)
+void Session::unregister_key_event(Component *src, int32_t key_code)
 {
     if (this->key_events.count(key_code) == 1)
     {
         auto vector = this->key_events.at(key_code);
-        for (auto iter = vector.begin(); iter != vector.end(); )
+        for (auto iter = vector.begin(); iter != vector.end();)
         {
             if (src == &(iter->get_component()))
             {
@@ -182,7 +200,7 @@ void Session::run()
                 {
                     for (const auto &func : this->key_events.at(event.key.keysym.sym))
                     {
-                        func(event.key.keysym.sym ,KeyPressType::UP);
+                        func(event.key.keysym.sym, KeyPressType::UP);
                     }
                 }
                 break;
@@ -209,16 +227,16 @@ void Session::run()
                 }
                 break;
             case SDL_MOUSEBUTTONDOWN:
-                for (auto& c : this->components)
+                for (auto &c : this->components)
                     c->mouse_down(event.button.x, event.button.y);
                 break;
             case SDL_MOUSEBUTTONUP:
-                for (auto& c : this->components)
+                for (auto &c : this->components)
                     c->mouse_up(event.button.x, event.button.y);
                 break;
             }
         }
-        for (auto& component : this->components)
+        for (auto &component : this->components)
         {
             component->tick();
             if (component->get_x() < 0 - 50 || component->get_x() > this->window_data.w + 50 || component->get_y() < 0 - 50 || component->get_y() > this->window_data.h + 50)
@@ -235,7 +253,7 @@ void Session::run()
         SDL_RenderClear(this->ren);
         this->remove_queued();
         this->add_queued();
-        for (auto& component : this->components)
+        for (auto &component : this->components)
         {
             component->render();
         }

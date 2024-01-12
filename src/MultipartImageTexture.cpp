@@ -11,3 +11,7 @@ MultipartImageTexture::MultipartImageTexture(std::shared_ptr<Session> session, s
     SDL_FreeSurface(surf);
     return tex;
 }()) {}
+
+std::shared_ptr<MultipartImageTexture> MultipartImageTexture::create_instance(std::shared_ptr<Session> session, std::string path) {
+    return std::shared_ptr<MultipartImageTexture>(new MultipartImageTexture(session, path));
+}
