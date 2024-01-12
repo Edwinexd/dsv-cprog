@@ -125,17 +125,7 @@ public:
 
         if (tick_count % 100 == 0)
         {
-            if (!wall_collide)
-            {
-                /*
-                if(tick_count % 200 == 0)
-                {
-                    // reverse direction, if active_direction is even we add 1, if it is odd we subtract 1
-                    is_left = !is_left ?  true : false;
-                }*/
-            }
             shoot_random_invader();
-
         }
         score_text->set_text("Score: " + std::to_string(total_invaders - alive_invaders));
     }
@@ -145,9 +135,9 @@ public:
     {
         if(is_left)
         {
-            for(unsigned col = 0; col < num_cols; col++)
+            for(unsigned col = 0; col < num_cols; ++col)
             {
-                for(unsigned row = 0; row < num_rows; row++)
+                for(unsigned row = 0; row < num_rows; ++row)
                 {
                     auto current_invader = invaders[col][row];
                     if(current_invader != nullptr)
@@ -170,8 +160,9 @@ public:
             }
         }
         else {
-            for(unsigned col = num_cols - 1; col > 0 ; --col)
+            for(int col = (int) num_cols - 1; col >= 0 ; --col)
             {
+
                 for(unsigned row = 0; row < num_rows; row++)
                 {
                     auto current_invader = invaders[col][row];
@@ -201,7 +192,7 @@ public:
 
     void update_direction()
     {
-        for (unsigned col = 0; col < num_cols; col++)
+        for (unsigned col = 0; col < num_cols; ++col)
         {
             if (!invaders[col].empty())
             {
@@ -212,7 +203,6 @@ public:
                         // Guaranteed to not be nullptr by tick
                         auto invader = invaders[col][row];
                         invader->set_direction(unit_vec[is_left ? 1 : 0]);
-                        
                     }
                 }
             }
@@ -246,7 +236,6 @@ private:
     int invader_spacing;
     int total_invaders = 0;
     int alive_invaders = 0;
-    const static int MARGIN = 50;
     Direction unit_vec[2] = {{1,0},{-1,0}};
     std::vector<std::vector<std::shared_ptr<Spaceinvader>>> invaders;
     std::shared_ptr<TextComponent> score_text;
