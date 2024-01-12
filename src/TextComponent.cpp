@@ -32,7 +32,7 @@ void TextComponent::set_text(std::string text) {
 void TextComponent::draw_text(std::string text) {
     this->text = text;
     
-    SDL_Color sdl_color = { color.r, color.g, color.b };
+    SDL_Color sdl_color = { color.get_r(), color.get_g(), color.get_b() };
     SDL_Surface* surf = TTF_RenderText_Blended(font, text.c_str(), sdl_color);
     tex = SDL_CreateTextureFromSurface(sys.ren, surf);
     SDL_FreeSurface(surf);

@@ -12,8 +12,13 @@ Session::Session() : window_data(0, 0, 0, 0)
     key_events = std::unordered_map<int32_t, std::vector<KeyEventCallback>>();
     win = sys.win;
     ren = sys.ren;
-    SDL_GetWindowSize(win, &window_data.w, &window_data.h);
-    SDL_GetWindowPosition(win, &window_data.x, &window_data.y);
+    int w, h, x, y;
+    SDL_GetWindowSize(win, &w, &h);
+    SDL_GetWindowPosition(win, &x, &y);
+    window_data.set_width(w);
+    window_data.set_height(h);
+    window_data.set_x(x);
+    window_data.set_y(y);
 }
 
 std::shared_ptr<Session> Session::create_instance()
@@ -217,12 +222,12 @@ void Session::run()
                 switch (event.window.type)
                 {
                 case SDL_WINDOWEVENT_MOVED:
-                    this->window_data.x = event.window.data1;
-                    this->window_data.y = event.window.data2;
+                    this->window_data.set_x(event.window.data1);
+                    this->window_data.set_y(event.window.data2);
                     break;
                 case SDL_WINDOWEVENT_RESIZED:
-                    this->window_data.w = event.window.data1;
-                    this->window_data.h = event.window.data2;
+                    this->window_data.set_width(event.window.data1);
+                    this->window_data.set_height(event.window.data2);
                     break;
                 }
                 break;
@@ -239,7 +244,7 @@ void Session::run()
         for (auto &component : this->components)
         {
             component->tick();
-            if (component->get_x() < 0 - 50 || component->get_x() > this->window_data.w + 50 || component->get_y() < 0 - 50 || component->get_y() > this->window_data.h + 50)
+            if (component->get_x() < 0 - 50 || component->get_x() > this->window_data.get_width()+ 50 || component->get_y() < 0 - 50 || component->get_y() > this->window_data.get_height() + 50)
             {
                 this->remove_component(component);
             }

@@ -9,7 +9,7 @@ Player::Player(std::shared_ptr<Session> session, int x, int y, int w, int h, boo
         if (t == KeyPressType::DOWN) {
             set_direction({3, 0, true});
         } else {
-            if (get_direction().dx > 0) {
+            if (get_direction().get_dx() > 0) {
                 set_direction({0, 0});
             }
         }
@@ -22,7 +22,7 @@ Player::Player(std::shared_ptr<Session> session, int x, int y, int w, int h, boo
         if (t == KeyPressType::DOWN) {
             set_direction({-3, 0, true});
         } else {
-            if (get_direction().dx < 0) {
+            if (get_direction().get_dx() < 0) {
                 set_direction({0, 0});
             }
         }
@@ -49,7 +49,7 @@ std::shared_ptr<Player> Player::create_instance(std::shared_ptr<Session> session
 void Player::tick() {
     Enemy::tick();
     if (is_dead()) {
-        if (get_direction().dy != 0 || get_direction().dx != 0) {
+        if (get_direction().get_dy() != 0 || get_direction().get_dx() != 0) {
             set_direction({0,0});
         }
         return;

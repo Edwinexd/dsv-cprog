@@ -14,10 +14,42 @@ class Component;
 
 struct WindowInformation
 {
-    int w, h, x, y;
-
+	int get_width() const
+	{
+		return w;
+	}
+	int get_height() const
+	{
+		return h;
+	}
+	int get_x() const
+	{
+		return x;
+	}
+	int get_y() const
+	{
+		return y;
+	}
+	void set_width(int n_w)
+	{
+		w = n_w;
+	}
+	void set_height(int n_h)
+	{
+		h = n_h;
+	}
+	void set_x(int n_x)
+	{
+		x = n_x;
+	}
+	void set_y(int n_y)
+	{
+		y = n_y;
+	}
     WindowInformation(int n_w, int n_h, int n_x, int n_y) : w(n_w), h(n_h), x(n_x), y(n_y)
     {}
+private:
+    int w, h, x, y;
 };
 
 struct CollisionEvent
@@ -43,12 +75,12 @@ private:
     SDL_Renderer* ren;
 
 
-    WindowInformation window_data;
 	std::vector<std::shared_ptr<Component>> components;
 	std::vector<std::shared_ptr<Component>> add_queue;
 	std::vector<std::shared_ptr<Component>> remove_queue;
 	std::vector<CollisionEvent> collision_events_queue;
 	std::unordered_map<int32_t , std::vector<KeyEventCallback>> key_events;
+    WindowInformation window_data;
 
     void remove_queued();
 	void add_queued();

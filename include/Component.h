@@ -18,11 +18,11 @@ public:
 	virtual void mouse_up(int x, int y) {}
 	virtual void render() const = 0;
 	virtual void tick() {
-		if (!direction.keep_on_screen || (direction.dx + rect.x > 0 && rect.x + direction.dx < session->get_window_data().w - rect.w)) {
-			rect.x += direction.dx;
+		if (!direction.get_keep_on_screen() || (direction.get_dx() + rect.x > 0 && rect.x + direction.get_dx() < session->get_window_data().get_width() - rect.w)) {
+			rect.x += direction.get_dx();
 		}
-		if (!direction.keep_on_screen || (direction.dy + rect.y > 0 && rect.y + direction.dy < session->get_window_data().h - rect.h)) {
-			rect.y += direction.dy;
+		if (!direction.get_keep_on_screen() || (direction.get_dy() + rect.y > 0 && rect.y + direction.get_dy() < session->get_window_data().get_height() - rect.h)) {
+			rect.y += direction.get_dy();
 		}
 	}
 	bool has_collision() const { return collision; }
