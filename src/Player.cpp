@@ -29,3 +29,8 @@ void Player::shoot() {
     ticks_since_last_shot = 0;
     session->play_sound("sounds/laser_shoot.wav", 0);
 }
+
+void Player::kill() {
+    Enemy::kill();
+    session->play_sound("sounds/big_explosion.wav", 0);
+}

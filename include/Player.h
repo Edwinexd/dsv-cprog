@@ -14,6 +14,7 @@ public:
     void tick() override;
     void shoot();
     void damage(int amount) override;
+    void kill() override;
     // void on_collision(std::shared_ptr<Component> other) override;
 private:
     unsigned char ticks_since_last_shot = 0;

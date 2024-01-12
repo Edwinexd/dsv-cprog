@@ -2,6 +2,7 @@
 #define INVADERS_H
 #include <Spaceinvader.h>
 #include <TextComponent.h>
+#include <Player.h>
 
 // TODO: This file should have a corresponding .cpp file
 class InvadersComponent : public Component
@@ -18,11 +19,17 @@ public:
                     if (invaders[col][row] == invader) {
                         invaders[col][row] = nullptr;
                         alive_invaders--;
+                        if (game_over) {
+                            return;
+                        }
                         session->play_sound("sounds/score.wav", 0);
                         return;
                     }
                 }
             }
+        } else if (auto player = std::dynamic_pointer_cast<Player>(other)) {
+            game_over = true;
+            // TODO: Spawn death beam or some other end effect
         }
     }
 
@@ -111,16 +118,21 @@ public:
     void tick() override
     {
         tick_count++;
-        if (alive_invaders == 0)
+        if (alive_invaders == 0 && !game_over)
         {
             score_text->set_text("You win!");
             return;
         }
-        if (tick_count % 100 == 0)
+        if (tick_count % 100 == 0 || (game_over && tick_count % 10 == 0))
         {
             shoot_random_invader();
         }
-        score_text->set_text("Score: " + std::to_string(total_invaders - alive_invaders));
+        if (game_over)
+        {
+            score_text->set_text("Game over!");
+        } else {
+            score_text->set_text("Score: " + std::to_string(total_invaders - alive_invaders));
+        }
     }
 
     void render() const override
@@ -148,6 +160,7 @@ private:
     int invader_spacing;
     int total_invaders = 0;
     int alive_invaders = 0;
+    bool game_over = false;
     std::vector<std::vector<std::shared_ptr<Spaceinvader>>> invaders;
     std::shared_ptr<TextComponent> score_text;
 };
