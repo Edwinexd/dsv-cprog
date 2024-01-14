@@ -42,11 +42,8 @@ public:
     void render() const override
     {
     }
-
-protected:
-    InvadersComponent(std::shared_ptr<Session> session, int x, int y, int num_rows, int num_cols, int invader_width, int invader_height, int invader_spacing, std::shared_ptr<TextComponent> score_text);
-        
 private:
+    InvadersComponent(std::shared_ptr<Session> session, int x, int y, int num_rows, int num_cols, int invader_width, int invader_height, int invader_spacing, std::shared_ptr<TextComponent> score_text);
     unsigned int random_seed;
     unsigned int tick_count = 0;
     bool is_left = true;
