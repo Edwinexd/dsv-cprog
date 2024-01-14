@@ -1,12 +1,12 @@
-#include "Constants.h" //gResPath-contains path to your resources.
+#include <Constants.h> //gResPath-contains path to your resources.
 #include <SDL2/SDL.h>
 #include "Session.h"
-#include "Component.h"
+#include <Component.h>
 #include <SDL2/SDL_image.h>
 #include <string>
 #include <memory>
 #include <iostream>
-#include "TextComponent.h"
+#include <TextComponent.h>
 #include <ImageComponent.h>
 #include <MultipartImageTexture.h>
 #include <MultipartTexture.h>

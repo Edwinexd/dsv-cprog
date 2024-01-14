@@ -4,7 +4,7 @@
 #include "Enemy.h"
 #include <Spaceinvader.h>
 #include <Color.h>
-#include "MultipartRectangleTexture.h"
+#include <MultipartRectangleTexture.h>
 #include <TextComponent.h>
 #include <Player.h>
 #include <array>

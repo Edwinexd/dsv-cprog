@@ -2,8 +2,8 @@
 #define PLAYER_H
 #include <MultipartComponent.h>
 #include <Direction.h>
-#include "MultipartRectangleTexture.h"
-#include "Enemy.h"
+#include <MultipartRectangleTexture.h>
+#include <Enemy.h>
 
 // Spelklass - Player härleds från Enemy
 class Player : public Enemy

@@ -7,7 +7,7 @@
 #include <string>
 #include <memory>
 #include <SDL2/SDL_mixer.h>
-#include "System.h"
+#include <System.h>
 
 class KeyEventCallback;
 class Component;

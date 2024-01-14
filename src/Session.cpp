@@ -1,6 +1,6 @@
 #include <SDL2/SDL.h>
 #include <stdexcept>
-#include "Session.h"
+#include <Session.h>
 #include <iostream>
 
 Session::Session() : window_data(0, 0, 0, 0)
