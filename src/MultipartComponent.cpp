@@ -20,14 +20,14 @@ void MultipartComponent::render() const {
         throw std::runtime_error("No textures in MultipartComponent");
     }
     const SDL_Rect& rect = get_rect();
-    SDL_RenderCopy(sys.ren, textures[current_texture]->get_texture(), NULL, &rect);
+    SDL_RenderCopy(sys.get_renderer(), textures[current_texture]->get_texture(), NULL, &rect);
 }
 
 void MultipartComponent::add_texture(std::shared_ptr<MultipartTexture> tex) {
     textures.push_back(tex);
 }
 
-void MultipartComponent::remove_texture(int index) {
+void MultipartComponent::remove_texture(size_t index) {
     textures.erase(textures.begin() + index);
 }
 

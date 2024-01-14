@@ -17,7 +17,7 @@ public:
         Component::tick();
     };
     void add_texture(std::shared_ptr<MultipartTexture> tex);
-    void remove_texture(int index);
+    void remove_texture(size_t index);
     void remove_texture(std::shared_ptr<MultipartTexture> tex);
     void set_texture(size_t index);
     void next_texture();
