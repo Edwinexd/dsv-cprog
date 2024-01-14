@@ -75,11 +75,12 @@ public:
         int top_y_bound = laser_y;
         int bottom_y_bound = get_rect().y + get_rect().h;
         // Draw multipart component with the dimensions above
+        /*
         std::shared_ptr<MultipartComponent> multipart = MultipartComponent::create_instance(session, left_x_bound, top_y_bound, right_x_bound - left_x_bound, bottom_y_bound - top_y_bound, false, {0, 0});
         auto multipartRectangle = MultipartRectangleTexture::create_instance(session, right_x_bound - left_x_bound, bottom_y_bound - top_y_bound, Color(255, 0, 0, 128));
         multipart->add_texture(multipartRectangle);
         session->add_component(multipart);
-
+        */
         // check if there is a component in the way of all components below us
         for (int r = row + 1; r < num_rows; r++)
         {
@@ -127,14 +128,14 @@ public:
             {
                 int x = col * (invader_width + invader_spacing);
                 int y = row * (invader_height + invader_spacing);
-                auto invader = Spaceinvader::create_instance(session, x + get_x(), y + get_y(), invader_width, invader_height, 1, "images/alive.png", "images/dead.png", 1);
-
+                auto invader = Spaceinvader::create_instance(session, x + get_x(), y + get_y(), invader_width, invader_height, 1, "images/alive.png", "images/dead.png");
                 session->add_component(invader);
                 invaders[col][row] = invader;
                 total_invaders++;
                 alive_invaders++;
             }
         }
+        update_direction();
     }
 
     bool shoot_bottom_of_column(int col)
@@ -153,8 +154,12 @@ public:
                 {
                     return false;
                 }
-                invader->shoot();
-                return true;
+                if(safe_to_shoot(col, row))
+                {
+                    std::cout << "Shooting from " << col << "," << row << std::endl;
+                    invader->shoot();
+                    return true;
+                }
             }
         }
         return false;

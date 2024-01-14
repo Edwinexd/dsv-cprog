@@ -12,7 +12,7 @@ public:
     }
     void shoot();
 
-    void tick() override;
+    //void tick() override;
     /*
     void mouse_down(int x, int y) {
         shoot();
