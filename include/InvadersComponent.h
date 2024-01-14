@@ -29,7 +29,7 @@ public:
                         if (game_over) {
                             return;
                         }
-                        session->play_sound("sounds/score.wav", 0);
+                        get_session()->play_sound("sounds/score.wav", 0);
                         return;
                     }
                 }
@@ -126,8 +126,8 @@ public:
             {
                 int x = col * (invader_width + invader_spacing);
                 int y = row * (invader_height + invader_spacing);
-                auto invader = Spaceinvader::create_instance(session, x + get_x(), y + get_y(), invader_width, invader_height, 1, "images/alive.png", "images/dead.png");
-                session->add_component(invader);
+                auto invader = Spaceinvader::create_instance(get_session(), x + get_x(), y + get_y(), invader_width, invader_height, 1, "images/alive.png", "images/dead.png");
+                get_session()->add_component(invader);
                 invaders[col][row] = invader;
                 total_invaders++;
                 alive_invaders++;
@@ -272,7 +272,7 @@ public:
                     {
                         if(!current_invader->is_dead())
                         {                            
-                            if(current_invader->get_x() + invader_width >= session->get_window_data().get_width() - invader_spacing*2)
+                            if(current_invader->get_x() + invader_width >= get_session()->get_window_data().get_width() - invader_spacing*2)
                             {
                                 is_left = true;
                                 update_direction();

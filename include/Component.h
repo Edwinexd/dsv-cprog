@@ -46,10 +46,11 @@ public:
 	Component& operator=(Component&&) = delete;
 protected:
 	Component(std::shared_ptr<Session>session, int x, int y, int w, int h, bool has_collision, Direction d = {0,0}) : session(session), collision(has_collision), rect{ x,y,w,h }, direction(d) {}
-    std::shared_ptr<Session> session;
     SDL_Rect get_rect() const { return rect; }
 	friend void Session::check_collision(std::shared_ptr<Component>); // Collision detection needs access to the rect
+	std::shared_ptr<Session> get_session() const { return session; }
 private:
+    std::shared_ptr<Session> session;
 	bool collision;
 	SDL_Rect rect;
 	Direction direction;

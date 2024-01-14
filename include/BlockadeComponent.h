@@ -14,7 +14,6 @@ public:
 private:
     BlockadeComponent(std::shared_ptr<Session> session, int x, int y, int w, int h, int hp, std::string alive_image_path, std::string dead_image_path);
     std::shared_ptr<TextComponent> health_text;
-    std::shared_ptr<ImageComponent> image_component;
 };
 
 #endif
