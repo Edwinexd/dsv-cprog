@@ -8,6 +8,7 @@
 #include <TextComponent.h>
 #include <Player.h>
 #include <array>
+#include <random>
 
 // Spelklass - Huvudsakliga spellogiken, härleds från Component
 // TODO: This file should have a corresponding .cpp file
@@ -39,10 +40,9 @@ public:
         }
     }
 
-    bool safe_to_shoot(int col, int row)
+    bool safe_to_shoot(unsigned col, unsigned row)
     {
-        // Since rows move at different speeds and in different directions
-        // we need to check if there effectively is a row in front of us
+        // We need to check if there effectively is a row in front of us
         // if there is, we can't shoot
         if (row == num_rows - 1)
         {
@@ -66,25 +66,23 @@ public:
         // the laser is clear of the invaders rect
         // we assume that all entities below us are moving +-2 pixels per tick in x-direction
         int ticks_to_clear = (get_rect().y + get_rect().h - laser_y) / laser_dy;
-        // TODO: This needs to be changed so we can draw as a small of a romb hitbox as possible
-        // will need to make spaceinvader movement deterministic
         int ticks_to_clear_x = ticks_to_clear * 2;
-        int ticks_to_clear_y = ticks_to_clear * laser_dy;
+        //int ticks_to_clear_y = ticks_to_clear * laser_dy;
         int left_x_bound = laser_x - ticks_to_clear_x;
         int right_x_bound = laser_x + ticks_to_clear_x;
         int top_y_bound = laser_y;
-        int bottom_y_bound = get_rect().y + get_rect().h;
-        // Draw multipart component with the dimensions above
+        int bottom_y_bound = get_rect().y + get_rect().h;  
         /*
+        //DEBUG: Draw multipart component with the dimensions above
         std::shared_ptr<MultipartComponent> multipart = MultipartComponent::create_instance(session, left_x_bound, top_y_bound, right_x_bound - left_x_bound, bottom_y_bound - top_y_bound, false, {0, 0});
         auto multipartRectangle = MultipartRectangleTexture::create_instance(session, right_x_bound - left_x_bound, bottom_y_bound - top_y_bound, Color(255, 0, 0, 128));
         multipart->add_texture(multipartRectangle);
         session->add_component(multipart);
         */
         // check if there is a component in the way of all components below us
-        for (int r = row + 1; r < num_rows; r++)
+        for (unsigned r = row + 1; r < num_rows; r++)
         {
-            for (int c = 0; c < num_cols; c++)
+            for (unsigned c = 0; c < num_cols; c++)
             {
                 auto other_invader = invaders[c][r];
                 if (other_invader.get() == nullptr)
@@ -111,7 +109,7 @@ public:
                 {
                     continue;
                 }
-                std::cout << "Can't shoot, invader " << col << "," << row << " is in the way!" << std::endl;
+                //DEBUG: std::cout << "Can't shoot, invader " << col << "," << row << " is in the way!" << std::endl;
                 return false;
             }
         }
@@ -156,7 +154,7 @@ public:
                 }
                 if(safe_to_shoot(col, row))
                 {
-                    std::cout << "Shooting from " << col << "," << row << std::endl;
+                    //DEBUG: std::cout << "Shooting from " << col << "," << row << std::endl;
                     invader->shoot();
                     return true;
                 }
@@ -180,7 +178,8 @@ public:
             return;
         }
         // Shuffle columns
-        std::random_shuffle(columns.begin(), columns.end());
+        std::default_random_engine rng(std::random_device{}());
+        std::shuffle(columns.begin(), columns.end(), rng);
         for (auto col : columns)
         {
             if (shoot_bottom_of_column(col))
