@@ -28,4 +28,12 @@ void System::play_sound(std::string path, int loops) {
     Mix_PlayChannel(-1, this->sound_bank.at(path).get(), loops);
 }
 
+SDL_Window* System::get_window() {
+    return win;
+}
+
+SDL_Renderer* System::get_renderer() {
+    return ren;
+}
+
 System sys;

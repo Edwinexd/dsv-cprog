@@ -19,7 +19,7 @@ std::shared_ptr<TextComponent> TextComponent::create_instance(std::shared_ptr<Se
 
 void TextComponent::render() const {
     const SDL_Rect &rect = get_rect();
-    SDL_RenderCopy(sys.ren, tex, NULL, &rect);
+    SDL_RenderCopy(sys.get_renderer(), tex, NULL, &rect);
 }
 
 void TextComponent::set_text(std::string text) {
@@ -34,7 +34,7 @@ void TextComponent::draw_text(std::string text) {
     
     SDL_Color sdl_color = { color.get_r(), color.get_g(), color.get_b() };
     SDL_Surface* surf = TTF_RenderText_Blended(font, text.c_str(), sdl_color);
-    tex = SDL_CreateTextureFromSurface(sys.ren, surf);
+    tex = SDL_CreateTextureFromSurface(sys.get_renderer(), surf);
     SDL_FreeSurface(surf);
     
     int w = calculate_width(text);

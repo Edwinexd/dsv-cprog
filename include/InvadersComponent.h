@@ -313,6 +313,21 @@ public:
     {
     }
 
+    unsigned get_current_tick() const
+    {
+        return tick_count;
+    }
+
+    unsigned get_alive_count() const
+    {
+        return alive_invaders;
+    }
+    
+    bool is_game_over() const
+    {
+        return game_over;
+    }
+
 protected:
     InvadersComponent(std::shared_ptr<Session> session, int x, int y, int num_rows, int num_cols, int invader_width, int invader_height, int invader_spacing, std::shared_ptr<TextComponent> score_text)
         : Component(
