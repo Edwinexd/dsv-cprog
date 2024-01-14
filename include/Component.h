@@ -2,8 +2,8 @@
 #define COMPONENT_H
 #include <SDL2/SDL.h>
 #include <memory>
-#include "Session.h"
-#include "Direction.h"
+#include <Session.h>
+#include <Direction.h>
 
 // Spelmotorklass - grundläggande komponent som ska kunna renderas och röra sig
 // Valt att lägga direction/rörelse direkt i Component istf e.x. MovementComponent för att undvika
@@ -27,8 +27,8 @@ public:
 	}
 	bool has_collision() const { return collision; }
 	void set_has_collision(bool c) { this->collision = c; }
-	Direction get_direction() const { return direction; }
-	void set_direction(Direction d) { direction = d; }
+	const Direction& get_direction() const { return direction; }
+	void set_direction(const Direction& d) { direction = d; }
 	void move(int dx, int dy) { rect.x += dx; rect.y += dy; }
 	void move_to(int x, int y) { rect.x = x; rect.y = y; }
 	int get_x() const { return rect.x; }

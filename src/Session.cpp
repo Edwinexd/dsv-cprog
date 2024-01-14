@@ -1,6 +1,6 @@
 #include <SDL2/SDL.h>
 #include <stdexcept>
-#include "Session.h"
+#include <Session.h>
 #include <iostream>
 
 Session::Session() : window_data(0, 0, 0, 0)
@@ -10,8 +10,8 @@ Session::Session() : window_data(0, 0, 0, 0)
     remove_queue = std::vector<std::shared_ptr<Component>>();
     collision_events_queue = std::vector<CollisionEvent>();
     key_events = std::unordered_map<int32_t, std::vector<KeyEventCallback>>();
-    win = sys.win;
-    ren = sys.ren;
+    win = sys.get_window();
+    ren = sys.get_renderer();
     int w, h, x, y;
     SDL_GetWindowSize(win, &w, &h);
     SDL_GetWindowPosition(win, &x, &y);

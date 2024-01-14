@@ -4,7 +4,7 @@
 #include "Enemy.h"
 #include <Spaceinvader.h>
 #include <Color.h>
-#include "MultipartRectangleTexture.h"
+#include <MultipartRectangleTexture.h>
 #include <TextComponent.h>
 #include <Player.h>
 #include <array>
@@ -311,6 +311,21 @@ public:
 
     void render() const override
     {
+    }
+
+    unsigned get_current_tick() const
+    {
+        return tick_count;
+    }
+
+    unsigned get_alive_count() const
+    {
+        return alive_invaders;
+    }
+    
+    bool is_game_over() const
+    {
+        return game_over;
     }
 
 protected:

@@ -1,4 +1,4 @@
-#include "System.h"
+#include <System.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
@@ -26,6 +26,14 @@ void System::play_sound(std::string path, int loops) {
         this->sound_bank.insert(std::make_pair(path, std::unique_ptr<Mix_Chunk>(Mix_LoadWAV((constants::gResPath + path).c_str()))));
     }
     Mix_PlayChannel(-1, this->sound_bank.at(path).get(), loops);
+}
+
+SDL_Window* System::get_window() {
+    return win;
+}
+
+SDL_Renderer* System::get_renderer() {
+    return ren;
 }
 
 System sys;

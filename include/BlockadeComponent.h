@@ -1,8 +1,8 @@
 #ifndef BLOCKADECOMPONENT_H
 #define BLOCKADECOMPONENT_H
 #include <Enemy.h>
-#include "TextComponent.h"
-#include "ImageComponent.h"
+#include <TextComponent.h>
+#include <ImageComponent.h>
 
 // Spelklass - Blockade härleds från Enemy
 class BlockadeComponent : public Enemy {

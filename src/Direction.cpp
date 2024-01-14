@@ -1,4 +1,4 @@
-#include "Direction.h"
+#include <Direction.h>
 
 Direction::Direction(int dx, int dy, bool keep_on_screen) : dx(dx), dy(dy), keep_on_screen(keep_on_screen) {}
 
