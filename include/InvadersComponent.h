@@ -20,7 +20,7 @@ public:
     }
 
     void on_remove(std::shared_ptr<Component> other);
-    
+
     bool safe_to_shoot(unsigned col, unsigned row);
 
 
@@ -44,19 +44,8 @@ public:
     }
 
 protected:
-    InvadersComponent(std::shared_ptr<Session> session, int x, int y, int num_rows, int num_cols, int invader_width, int invader_height, int invader_spacing, std::shared_ptr<TextComponent> score_text)
-        : Component(
-              session, x, y, [&]()
-              { return num_cols * (invader_width + invader_spacing) - invader_spacing; }(),
-              [&]()
-              { return num_rows * (invader_height + invader_spacing) - invader_spacing; }(),
-              false),
-          num_rows(num_rows), num_cols(num_cols),
-          invader_width(invader_width), invader_height(invader_height), invader_spacing(invader_spacing), score_text(score_text)
-    {
-        create_invaders();
-    }
-
+    InvadersComponent(std::shared_ptr<Session> session, int x, int y, int num_rows, int num_cols, int invader_width, int invader_height, int invader_spacing, std::shared_ptr<TextComponent> score_text);
+        
 private:
     unsigned int random_seed;
     unsigned int tick_count = 0;
