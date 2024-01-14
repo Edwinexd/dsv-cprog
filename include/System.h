@@ -9,7 +9,7 @@
 #include <unordered_map>
 #include <memory>
 
-
+// Spelmotorklass - Systemklass som hanterar huvuddelar av SDL
 struct System
 {
 	System();

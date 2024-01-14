@@ -6,6 +6,15 @@
 #include <vector>
 #include <stdexcept>
 
+MultipartComponent::MultipartComponent(std::shared_ptr<Session> session, int x, int y, int w, int h, bool has_collision, Direction d) : Component(session, x, y, w, h, has_collision, d) {
+    current_texture = 0;
+    textures = std::vector<std::shared_ptr<MultipartTexture>>();
+}
+
+std::shared_ptr<MultipartComponent> MultipartComponent::create_instance(std::shared_ptr<Session> session, int x, int y, int w, int h, bool has_collision, Direction d) {
+    return std::shared_ptr<MultipartComponent>(new MultipartComponent(session, x, y, w, h, has_collision, d));
+}
+
 void MultipartComponent::render() const {
     if (textures.size() == 0) {
         throw std::runtime_error("No textures in MultipartComponent");

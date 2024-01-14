@@ -59,7 +59,7 @@ protected:
 // };
 
 int main(int argc, char** argv) {
-	std::shared_ptr<Session> g_session = std::make_shared<Session>();
+	std::shared_ptr<Session> g_session = Session::create_instance();
 
 	g_session->play_sound("sounds/legends.wav", -1);
 	// g_session->play_sound("sounds/bgMusic.wav", -1);
@@ -84,7 +84,7 @@ int main(int argc, char** argv) {
 	// kill enemy
 	std::cout << (enemy.get() == nullptr) << std::endl;
 	
-	auto spaceinvader = Spaceinvader::create_instance(g_session, 200, 200, 45, 45, 100, "images/alive.png", "images/dead.png", 29);
+	auto spaceinvader = Spaceinvader::create_instance(g_session, 200, 200, 45, 45, 100, "images/alive.png", "images/dead.png");
 	spaceinvader->kill();
 
 	// Create invaders component
@@ -102,13 +102,13 @@ int main(int argc, char** argv) {
 
 	// Create some blockade components
 	auto blockade = BlockadeComponent::create_instance(g_session, 100, 600, 100, 100, 10, "images/castle_full_health.png", "images/castle_low_health.png");
-	g_session->add_component(blockade);
+	g_session->add_component(std::move(blockade));
 	auto blockade2 = BlockadeComponent::create_instance(g_session, 300, 600, 100, 100, 10, "images/castle_full_health.png", "images/castle_low_health.png");
-	g_session->add_component(blockade2);
+	g_session->add_component(std::move(blockade2));
 	auto blockade3 = BlockadeComponent::create_instance(g_session, 500, 600, 100, 100, 10, "images/castle_full_health.png", "images/castle_low_health.png");
-	g_session->add_component(blockade3);
+	g_session->add_component(std::move(blockade3));
 	auto blockade4 = BlockadeComponent::create_instance(g_session, 700, 600, 100, 100, 10, "images/castle_full_health.png", "images/castle_low_health.png");
-	g_session->add_component(blockade4);
+	g_session->add_component(std::move(blockade4));
 
 	// Create player
 	auto player = Player::create_instance(g_session, 700, 750, 75, 75, true, 3, "images/player_alive.png", "images/player_dead.png");

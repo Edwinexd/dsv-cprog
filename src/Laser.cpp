@@ -9,6 +9,10 @@ Laser::Laser(std::shared_ptr<Session> session, int x, int y, int w, int h, bool 
     add_texture(MultipartRectangleTexture::create_instance(session, w, h, {200, 200, 200, 255}));
 }
 
+std::shared_ptr<Laser> Laser::create_instance(std::shared_ptr<Session> session, int x, int y, int w, int h, bool has_collision, Direction direction, int damage) {
+    return std::shared_ptr<Laser>(new Laser(session, x, y, w, h, has_collision, direction, damage));
+}
+
 void Laser::tick() {
     MultipartComponent::tick();
     ticks++;
