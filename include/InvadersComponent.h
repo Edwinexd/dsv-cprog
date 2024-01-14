@@ -1,8 +1,11 @@
 #ifndef INVADERS_H
 #define INVADERS_H
+#include "Direction.h"
+#include "Enemy.h"
 #include <Spaceinvader.h>
 #include <TextComponent.h>
 #include <Player.h>
+#include <array>
 
 // Spelklass - Huvudsakliga spellogiken, härleds från Component
 // TODO: This file should have a corresponding .cpp file
@@ -15,8 +18,8 @@ public:
 
     void on_remove(std::shared_ptr<Component> other) {
         if (auto invader = std::dynamic_pointer_cast<Spaceinvader>(other)) {
-            for (int col = 0; col < num_cols; col++) {
-                for (int row = 0; row < num_rows; row++) {
+            for (unsigned col = 0; col < num_cols; col++) {
+                for (unsigned row = 0; row < num_rows; row++) {
                     if (invaders[col][row] == invader) {
                         invaders[col][row] = nullptr;
                         alive_invaders--;
@@ -38,13 +41,13 @@ public:
     {
         invaders.resize(num_cols, std::vector<std::shared_ptr<Spaceinvader>>(num_rows));
 
-        for (int row = 0; row < num_rows; row++)
+        for (unsigned row = 0; row < num_rows; row++)
         {
-            for (int col = 0; col < num_cols; col++)
+            for (unsigned col = 0; col < num_cols; col++)
             {
                 int x = col * (invader_width + invader_spacing);
                 int y = row * (invader_height + invader_spacing);
-                auto invader = Spaceinvader::create_instance(session, x, y, invader_width, invader_height, 1, "images/alive.png", "images/dead.png", 1);
+                auto invader = Spaceinvader::create_instance(session, x, y, invader_width, invader_height, 1, "images/alive.png", "images/dead.png");
                 session->add_component(invader);
                 invaders[col][row] = invader;
                 total_invaders++;
@@ -55,6 +58,7 @@ public:
 
     bool shoot_bottom_of_column(int col)
     {
+        
         for (int row = num_rows - 1; row >= 0; row--)
         {
             if (invaders[col][row].get() != nullptr)
@@ -73,8 +77,8 @@ public:
 
     void shoot_random_invader()
     {
-        std::vector<int> columns;
-        for (int col = 0; col < num_cols; col++)
+        std::vector<unsigned> columns;
+        for (unsigned col = 0; col < num_cols; col++)
         {
             if (!invaders[col].empty())
             {
@@ -98,11 +102,11 @@ public:
 
     void shoot_bottom_invaders()
     {
-        for (int col = 0; col < num_cols; col++)
+        for (unsigned col = 0; col < num_cols; col++)
         {
             if (!invaders[col].empty())
             {
-                for (int row = num_rows - 1; row >= 0; row--)
+                for (unsigned row = num_rows - 1; row >= 0; row--)
                 {
                     if (invaders[col][row] != nullptr)
                     {
@@ -124,6 +128,9 @@ public:
             score_text->set_text("You win!");
             return;
         }
+
+        check_wall_collision();
+
         if (tick_count % 100 == 0 || (game_over && tick_count % 10 == 0))
         {
             shoot_random_invader();
@@ -133,6 +140,83 @@ public:
             score_text->set_text("Game over!");
         } else {
             score_text->set_text("Score: " + std::to_string(total_invaders - alive_invaders));
+        }
+    }
+
+
+    bool check_wall_collision()
+    {
+        if(is_left)
+        {
+            for(unsigned col = 0; col < num_cols; ++col)
+            {
+                for(unsigned row = 0; row < num_rows; ++row)
+                {
+                    auto current_invader = invaders[col][row];
+                    if(current_invader != nullptr)
+                    {
+                        if(!current_invader->is_dead())
+                        {
+                            
+                            if(current_invader->get_x() <= invader_spacing*2)
+                            {
+                                is_left = false;
+                                update_direction();
+                                return true;
+
+                            }
+
+                        }
+                    }
+                }
+                
+            }
+        }
+        else {
+            for(int col = (int) num_cols - 1; col >= 0 ; --col)
+            {
+
+                for(unsigned row = 0; row < num_rows; row++)
+                {
+                    auto current_invader = invaders[col][row];
+                    if(current_invader != nullptr)
+                    {
+                        if(!current_invader->is_dead())
+                        {                            
+                            if(current_invader->get_x() + invader_width >= session->get_window_data().get_width() - invader_spacing*2)
+                            {
+                                is_left = true;
+                                update_direction();
+                                return true;
+
+                            }
+
+                        }
+                    }
+                }
+
+            }
+        }
+        return false;
+
+    }
+
+    void update_direction()
+    {
+        for (unsigned col = 0; col < num_cols; ++col)
+        {
+            if (!invaders[col].empty())
+            {
+                for (unsigned row = 0; row < num_rows; ++row)
+                {
+                    if (invaders[col][row] != nullptr)
+                    {
+                        // Guaranteed to not be nullptr by tick
+                        auto invader = invaders[col][row];
+                        invader->set_direction(unit_vec[is_left ? 1 : 0]);
+                    }
+                }
+            }
         }
     }
 
@@ -153,14 +237,17 @@ protected:
         create_invaders();
     }
 private:
-    int tick_count = 0;
-    int num_rows;
-    int num_cols;
+    unsigned int random_seed;
+    unsigned int tick_count = 0;
+    bool is_left = true;
+    unsigned int num_rows;
+    unsigned int num_cols;
     int invader_width;
     int invader_height;
     int invader_spacing;
     int total_invaders = 0;
     int alive_invaders = 0;
+    Direction unit_vec[2] = {{1,0},{-1,0}};
     bool game_over = false;
     std::vector<std::vector<std::shared_ptr<Spaceinvader>>> invaders;
     std::shared_ptr<TextComponent> score_text;

@@ -84,7 +84,7 @@ int main(int argc, char** argv) {
 	// kill enemy
 	std::cout << (enemy.get() == nullptr) << std::endl;
 	
-	auto spaceinvader = Spaceinvader::create_instance(g_session, 200, 200, 45, 45, 100, "images/alive.png", "images/dead.png", 29);
+	auto spaceinvader = Spaceinvader::create_instance(g_session, 200, 200, 45, 45, 100, "images/alive.png", "images/dead.png");
 	spaceinvader->kill();
 	// Create invaders component
 	auto score_text = TextComponent::create_instance(g_session, 250, 250, 300, 50, "Loading...", {255, 255, 255, 255}, Font::REGULAR);

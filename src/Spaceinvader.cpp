@@ -1,11 +1,13 @@
-#include<Spaceinvader.h>
 #include <stdlib.h>
+#include <Spaceinvader.h>
 
 void Spaceinvader::shoot() {
     std::shared_ptr<Laser> b = Laser::create_instance(session, get_x() + (get_width()/2), get_y() + get_height(), 5, 40, true, {0, 2}, 1);
     session->add_component(b);
 }
 
+
+/*
 void Spaceinvader::tick() {
     Enemy::tick();
     ticks_loop++;
@@ -22,10 +24,8 @@ void Spaceinvader::tick() {
         }
     }
     set_direction(directions[active_direction]);
-    /*
     if (ticks_loop % 2 == 0) {
         rect.x += directions[active_direction].dx;
         rect.y += directions[active_direction].dy;
     }
     */
-}

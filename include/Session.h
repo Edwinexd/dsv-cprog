@@ -12,6 +12,7 @@
 class KeyEventCallback;
 class Component;
 
+//This struct is only ever acquired behind a const reference.
 struct WindowInformation
 {
 	int get_width() const
@@ -93,7 +94,7 @@ public:
 	void register_key_event(KeyEventCallback callback);
 	void unregister_key_event(Component* src); // remove every callback from that component
 	void unregister_key_event(Component* src, int32_t key_code);
-    WindowInformation get_window_data() const
+    const WindowInformation& get_window_data()
     {
         return window_data;
     }
