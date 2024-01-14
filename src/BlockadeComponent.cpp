@@ -34,10 +34,9 @@ void BlockadeComponent::tick() {
 
 void BlockadeComponent::kill() {
     Enemy::kill();
-    session->play_sound("sounds/big_explosion.wav", 0);
+    get_session()->play_sound("sounds/big_explosion.wav", 0);
 }
 
 BlockadeComponent::~BlockadeComponent() {
-    session->remove_component(health_text);
-    session->remove_component(image_component);
+    get_session()->remove_component(health_text);
 }

@@ -12,7 +12,6 @@
 class KeyEventCallback;
 class Component;
 
-//This struct is only ever acquired behind a const reference.
 struct WindowInformation
 {
 	int get_width() const
@@ -55,16 +54,24 @@ private:
 
 struct CollisionEvent
 {
-    std::shared_ptr<Component> src;
-    std::shared_ptr<Component> other;
 	bool operator==(const CollisionEvent& other) const
 	{
 		return (src == other.src && this->other == other.other) || (src == other.other && this->other == other.src);
 	}
+	std::shared_ptr<Component> get_src() const
+	{
+		return src;
+	}
+	std::shared_ptr<Component> get_other() const
+	{
+		return other;
+	}
 private:
     CollisionEvent(std::shared_ptr<Component> src, std::shared_ptr<Component> other) : src(src), other(other)
     {
-    }
+    } // only Session should be allowed to create this
+    std::shared_ptr<Component> src;
+    std::shared_ptr<Component> other;
 	friend class Session;
 };
 
