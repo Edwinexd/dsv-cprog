@@ -86,9 +86,19 @@ int main(int argc, char** argv) {
 	
 	auto spaceinvader = Spaceinvader::create_instance(g_session, 200, 200, 45, 45, 100, "images/alive.png", "images/dead.png");
 	spaceinvader->kill();
+
 	// Create invaders component
-	auto score_text = TextComponent::create_instance(g_session, 250, 250, 300, 50, "Loading...", {255, 255, 255, 255}, Font::REGULAR);
-	auto invaders = InvadersComponent::create_instance(g_session, 100, 100, 3, 10, 45, 45, 10, score_text);
+	// calculate number of invaders we can fit on the x-axis
+	// invaders move +-200 pixels on the x-axis so we have 850 - 200 = 650 pixels to work with
+	int invader_size = 45;
+	int invader_spacing = 10;
+	int num_of_columns = 650 / (invader_size + invader_spacing);
+
+
+	auto score_text = TextComponent::create_instance(g_session, g_session->get_window_data().get_width() / 2 - 50, 100, 300, 50, "Loading...", {255, 255, 255, 255}, Font::REGULAR);
+	g_session->add_component(score_text);
+	auto invaders = InvadersComponent::create_instance(g_session, 100, 150, 4, num_of_columns, invader_size, invader_size, invader_spacing, score_text);
+	g_session->add_component(invaders);
 
 	// Create some blockade components
 	auto blockade = BlockadeComponent::create_instance(g_session, 100, 600, 100, 100, 10, "images/castle_full_health.png", "images/castle_low_health.png");

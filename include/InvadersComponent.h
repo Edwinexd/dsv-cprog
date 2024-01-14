@@ -3,9 +3,12 @@
 #include "Direction.h"
 #include "Enemy.h"
 #include <Spaceinvader.h>
+#include <Color.h>
+#include "MultipartRectangleTexture.h"
 #include <TextComponent.h>
 #include <Player.h>
 #include <array>
+#include <random>
 
 // Spelklass - Huvudsakliga spellogiken, härleds från Component
 // TODO: This file should have a corresponding .cpp file
@@ -37,6 +40,82 @@ public:
         }
     }
 
+    bool safe_to_shoot(unsigned col, unsigned row)
+    {
+        // We need to check if there effectively is a row in front of us
+        // if there is, we can't shoot
+        if (row == num_rows - 1)
+        {
+            return true;
+        }
+        auto invader = invaders[col][row];
+        if (invader.get() == nullptr)
+        {
+            return true;
+        }
+        if (invader->is_dead())
+        {
+            return true;
+        }
+
+        int laser_dy = 1;
+        int laser_x = invader->get_x() + (invader->get_width() / 2);
+        int laser_y = invader->get_y() + invader->get_height();
+
+        // check all components in front of us to see if they are in the way or are going to be in the way before
+        // the laser is clear of the invaders rect
+        // we assume that all entities below us are moving +-2 pixels per tick in x-direction
+        int ticks_to_clear = (get_rect().y + get_rect().h - laser_y) / laser_dy;
+        int ticks_to_clear_x = ticks_to_clear * 2;
+        //int ticks_to_clear_y = ticks_to_clear * laser_dy;
+        int left_x_bound = laser_x - ticks_to_clear_x;
+        int right_x_bound = laser_x + ticks_to_clear_x;
+        int top_y_bound = laser_y;
+        int bottom_y_bound = get_rect().y + get_rect().h;  
+        /*
+        //DEBUG: Draw multipart component with the dimensions above
+        std::shared_ptr<MultipartComponent> multipart = MultipartComponent::create_instance(session, left_x_bound, top_y_bound, right_x_bound - left_x_bound, bottom_y_bound - top_y_bound, false, {0, 0});
+        auto multipartRectangle = MultipartRectangleTexture::create_instance(session, right_x_bound - left_x_bound, bottom_y_bound - top_y_bound, Color(255, 0, 0, 128));
+        multipart->add_texture(multipartRectangle);
+        session->add_component(multipart);
+        */
+        // check if there is a component in the way of all components below us
+        for (unsigned r = row + 1; r < num_rows; r++)
+        {
+            for (unsigned c = 0; c < num_cols; c++)
+            {
+                auto other_invader = invaders[c][r];
+                if (other_invader.get() == nullptr)
+                {
+                    continue;
+                }
+                if (other_invader->is_dead())
+                {
+                    continue;
+                }
+                if (other_invader->get_x() + other_invader->get_width() < left_x_bound)
+                {
+                    continue;
+                }
+                if (other_invader->get_x() > right_x_bound)
+                {
+                    continue;
+                }
+                if (other_invader->get_y() + other_invader->get_height() < top_y_bound)
+                {
+                    continue;
+                }
+                if (other_invader->get_y() > bottom_y_bound)
+                {
+                    continue;
+                }
+                //DEBUG: std::cout << "Can't shoot, invader " << col << "," << row << " is in the way!" << std::endl;
+                return false;
+            }
+        }
+        return true;
+    }
+
     void create_invaders()
     {
         invaders.resize(num_cols, std::vector<std::shared_ptr<Spaceinvader>>(num_rows));
@@ -47,13 +126,14 @@ public:
             {
                 int x = col * (invader_width + invader_spacing);
                 int y = row * (invader_height + invader_spacing);
-                auto invader = Spaceinvader::create_instance(session, x, y, invader_width, invader_height, 1, "images/alive.png", "images/dead.png");
+                auto invader = Spaceinvader::create_instance(session, x + get_x(), y + get_y(), invader_width, invader_height, 1, "images/alive.png", "images/dead.png");
                 session->add_component(invader);
                 invaders[col][row] = invader;
                 total_invaders++;
                 alive_invaders++;
             }
         }
+        update_direction();
     }
 
     bool shoot_bottom_of_column(int col)
@@ -68,8 +148,16 @@ public:
                 {
                     continue;
                 }
-                invader->shoot();
-                return true;
+                if (!safe_to_shoot(col, row))
+                {
+                    return false;
+                }
+                if(safe_to_shoot(col, row))
+                {
+                    //DEBUG: std::cout << "Shooting from " << col << "," << row << std::endl;
+                    invader->shoot();
+                    return true;
+                }
             }
         }
         return false;
@@ -90,7 +178,8 @@ public:
             return;
         }
         // Shuffle columns
-        std::random_shuffle(columns.begin(), columns.end());
+        std::default_random_engine rng(std::random_device{}());
+        std::shuffle(columns.begin(), columns.end(), rng);
         for (auto col : columns)
         {
             if (shoot_bottom_of_column(col))
@@ -223,6 +312,7 @@ public:
     void render() const override
     {
     }
+
 protected:
     InvadersComponent(std::shared_ptr<Session> session, int x, int y, int num_rows, int num_cols, int invader_width, int invader_height, int invader_spacing, std::shared_ptr<TextComponent> score_text)
         : Component(
@@ -236,6 +326,7 @@ protected:
     {
         create_invaders();
     }
+
 private:
     unsigned int random_seed;
     unsigned int tick_count = 0;

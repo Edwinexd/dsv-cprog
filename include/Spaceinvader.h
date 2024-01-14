@@ -11,6 +11,8 @@ public:
         return std::shared_ptr<Spaceinvader>(new Spaceinvader(session, x, y, w, h, hp, alive_image_path, dead_image_path));
     }
     void shoot();
+
+    //void tick() override;
     /*
     void mouse_down(int x, int y) {
         shoot();
