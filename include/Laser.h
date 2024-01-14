@@ -13,9 +13,8 @@ public:
     int getDamage() const {
         return damage;
     }
-protected:
-    Laser(std::shared_ptr<Session> session, int x, int y, int w, int h, bool has_collision, Direction direction, int damage);
 private:
+    Laser(std::shared_ptr<Session> session, int x, int y, int w, int h, bool has_collision, Direction direction, int damage);
     int damage;
     unsigned char ticks = 0;
 };

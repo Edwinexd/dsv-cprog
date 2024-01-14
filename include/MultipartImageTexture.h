@@ -12,7 +12,7 @@ class MultipartImageTexture : public MultipartTexture
 {
 public:
     static std::shared_ptr<MultipartImageTexture> create_instance(std::shared_ptr<Session> session, std::string path);
-protected:
+private:
     MultipartImageTexture(std::shared_ptr<Session> session, std::string path);
 };
 

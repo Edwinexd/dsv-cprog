@@ -12,7 +12,7 @@ class MultipartRectangleTexture : public MultipartTexture
 {
 public:
     static std::shared_ptr<MultipartRectangleTexture> create_instance(std::shared_ptr<Session> session, int width, int height, Color color);
-protected:
+private:
     MultipartRectangleTexture(std::shared_ptr<Session> session, int width, int height, Color color);
 };
 
